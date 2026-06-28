@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AM Shift Tracker</title>
+<style>
+:root {
+  --p1: #3B6DD4;
+  --p1-light: #EBF0FB;
+  --p1-mid: #B5C9F0;
+  --p2: #7B4FBF;
+  --p2-light: #F0EBF9;
+  --p2-mid: #C9B5E8;
+  --p3: #1A9E6E;
+  --p3-light: #E6F5F0;
+  --p3-mid: #9FD9C4;
+  --green: #1A7A40;
+  --green-bg: #E8F5ED;
+  --amber: #B85C00;
+  --amber-bg: #FDF3E3;
+  --red: #C0392B;
+  --red-bg: #FDEDEB;
+  --gray-50: #F7F8FA;
+  --gray-100: #EEF0F3;
+  --gray-200: #DDE0E6;
+  --gray-400: #9BA3B0;
+  --gray-600: #5A6270;
+  --gray-800: #1E2330;
+  --white: #FFFFFF;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--gray-50);color:var(--gray-800);min-height:100vh;}
+
+/* HEADER */
+.top-bar{background:var(--gray-800);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-bar-left{display:flex;align-items:center;gap:12px;}
+.logo{font-size:15px;font-weight:600;color:#fff;letter-spacing:-.3px;}
+.logo span{color:var(--p1-mid);font-weight:400;}
+.shift-badge{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);}
+.top-bar-right{display:flex;align-items:center;gap:10px;}
+.am-name-input{font-size:13px;padding:5px 10px;border:1px solid rgba(255,255,255,0.2);border-radius:var(--radius-sm);background:rgba(255,255,255,0.08);color:#fff;width:140px;}
+.am-name-input::placeholder{color:rgba(255,255,255,0.4);}
+.am-name-input:focus{outline:none;border-color:rgba(255,255,255,0.4);}
+.header-date{font-size:12px;color:rgba(255,255,255,0.5);}
+
+/* STATS BAR */
+.stats-bar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;display:flex;align-items:center;gap:0;}
+.stat-item{padding:14px 20px;display:flex;align-items:center;gap:8px;border-right:1px solid var(--gray-100);}
+.stat-item:first-child{padding-left:0;}
+.stat-val{font-size:20px;font-weight:600;color:var(--gray-800);}
+.stat-lbl{font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;}
+.stat-divider{width:1px;background:var(--gray-100);align-self:stretch;}
+.overall-prog{flex:1;padding:14px 20px;display:flex;align-items:center;gap:10px;}
+.prog-track{flex:1;height:6px;background:var(--gray-100);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));transition:width .4s ease;}
+.prog-pct{font-size:13px;font-weight:600;color:var(--gray-800);min-width:36px;text-align:right;}
+
+/* PERIOD TABS */
+.period-nav{padding:20px 24px 0;display:flex;gap:10px;}
+.period-tab{flex:1;padding:14px 16px;border-radius:var(--radius) var(--radius) 0 0;border:1px solid var(--gray-200);border-bottom:none;background:var(--white);cursor:pointer;text-align:left;transition:all .15s;position:relative;bottom:-1px;}
+.period-tab:hover{background:var(--gray-50);}
+.period-tab.active-p1{background:var(--p1);border-color:var(--p1);color:#fff;}
+.period-tab.active-p2{background:var(--p2);border-color:var(--p2);color:#fff;}
+.period-tab.active-p3{background:var(--p3);border-color:var(--p3);color:#fff;}
+.tab-period-name{font-size:15px;font-weight:600;display:block;}
+.tab-time{font-size:11px;opacity:.75;display:block;margin-top:1px;}
+.tab-count{font-size:11px;display:block;margin-top:6px;opacity:.8;}
+.tab-mini-bar{height:3px;border-radius:2px;background:rgba(255,255,255,0.3);margin-top:6px;overflow:hidden;}
+.tab-mini-fill{height:100%;background:rgba(255,255,255,0.85);border-radius:2px;transition:width .3s;}
+.period-tab:not([class*="active"]) .tab-mini-bar{background:var(--gray-100);}
+.period-tab:not([class*="active"]) .tab-mini-fill{background:var(--gray-400);}
+.period-tab:not([class*="active"]) .tab-period-name{color:var(--gray-800);}
+.period-tab:not([class*="active"]) .tab-time{color:var(--gray-400);}
+.period-tab:not([class*="active"]) .tab-count{color:var(--gray-400);}
+
+/* MAIN CONTENT */
+.main{background:var(--white);border:1px solid var(--gray-200);border-radius:0 0 var(--radius) var(--radius);margin:0 24px;padding:24px;min-height:400px;}
+
+/* CATEGORY */
+.cat-section{margin-bottom:20px;}
+.cat-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.cat-dot{width:8px;height:8px;border-radius:50%;}
+.cat-name{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400);}
+.cat-progress{font-size:11px;color:var(--gray-400);}
+
+/* TASK CARDS */
+.task-card{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);margin-bottom:6px;transition:border-color .15s,box-shadow .15s;}
+.task-card:hover{border-color:var(--gray-400);box-shadow:var(--shadow-sm);}
+.task-card.is-done{background:var(--gray-50);border-color:var(--gray-100);}
+.task-card.is-expanded{border-color:var(--gray-400);box-shadow:var(--shadow-sm);}
+.task-row{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer;user-select:none;}
+.check-circle{width:22px;height:22px;border-radius:50%;border:2px solid var(--gray-200);background:var(--white);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.check-circle:hover{border-color:var(--gray-400);}
+.check-circle.checked-p1{background:var(--p1);border-color:var(--p1);}
+.check-circle.checked-p2{background:var(--p2);border-color:var(--p2);}
+.check-circle.checked-p3{background:var(--p3);border-color:var(--p3);}
+.check-circle svg{width:11px;height:11px;stroke:#fff;stroke-width:2.5;fill:none;display:none;}
+.check-circle.checked-p1 svg,.check-circle.checked-p2 svg,.check-circle.checked-p3 svg{display:block;}
+.task-info{flex:1;min-width:0;}
+.task-name{font-size:14px;font-weight:500;color:var(--gray-800);}
+.task-card.is-done .task-name{text-decoration:line-through;color:var(--gray-400);}
+.task-inline-meta{display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap;}
+.task-metric-pill{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--gray-100);color:var(--gray-600);font-weight:500;}
+.task-time-pill{font-size:11px;color:var(--gray-400);}
+.status-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;}
+.sb-on-track{background:var(--green-bg);color:var(--green);}
+.sb-at-risk{background:var(--amber-bg);color:var(--amber);}
+.sb-missed{background:var(--red-bg);color:var(--red);}
+.task-expand-icon{font-size:16px;color:var(--gray-400);transition:transform .2s;flex-shrink:0;line-height:1;}
+.task-expand-icon.open{transform:rotate(180deg);}
+
+/* TASK DETAIL */
+.task-detail{border-top:1px solid var(--gray-100);padding:14px;background:var(--gray-50);}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.detail-full{grid-column:1/-1;}
+.det-label{font-size:11px;font-weight:500;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;}
+.det-input{width:100%;font-size:13px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);}
+.det-input:focus{outline:none;border-color:var(--gray-400);}
+.det-textarea{width:100%;font-size:13px;padding:7px 10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);resize:none;min-height:60px;font-family:inherit;}
+.det-textarea:focus{outline:none;border-color:var(--gray-400);}
+.status-buttons{display:flex;gap:6px;flex-wrap:wrap;}
+.st-btn{padding:5px 12px;font-size:12px;border-radius:20px;border:1px solid var(--gray-200);cursor:pointer;background:var(--white);color:var(--gray-600);transition:all .12s;}
+.st-btn:hover{border-color:var(--gray-400);}
+.st-btn.active-on-track{background:var(--green-bg);color:var(--green);border-color:var(--green);}
+.st-btn.active-at-risk{background:var(--amber-bg);color:var(--amber);border-color:var(--amber);}
+.st-btn.active-missed{background:var(--red-bg);color:var(--red);border-color:var(--red);}
+.mark-btn{width:100%;padding:8px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all .15s;}
+.mark-complete-p1{background:var(--p1);color:#fff;}
+.mark-complete-p2{background:var(--p2);color:#fff;}
+.mark-complete-p3{background:var(--p3);color:#fff;}
+.mark-incomplete{background:var(--gray-100);color:var(--gray-600);}
+
+/* BOTTOM BAR */
+.bottom-bar{margin:16px 24px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.bottom-actions{display:flex;gap:8px;}
+.action-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);border:1px solid var(--gray-200);cursor:pointer;background:var(--white);color:var(--gray-800);display:flex;align-items:center;gap:7px;transition:all .15s;}
+.action-btn:hover{border-color:var(--gray-400);box-shadow:var(--shadow-sm);}
+.action-btn.primary{background:var(--gray-800);color:#fff;border-color:var(--gray-800);}
+.action-btn.primary:hover{background:#111;}
+.reset-btn{padding:8px 14px;font-size:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);cursor:pointer;background:var(--white);color:var(--gray-400);transition:all .15s;}
+.reset-btn:hover{border-color:var(--red);color:var(--red);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:var(--radius);width:100%;max-width:580px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-md);}
+.modal-header{padding:20px 20px 16px;border-bottom:1px solid var(--gray-100);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--white);}
+.modal-title{font-size:16px;font-weight:600;color:var(--gray-800);}
+.modal-sub{font-size:12px;color:var(--gray-400);margin-top:2px;}
+.modal-close{width:28px;height:28px;border-radius:50%;border:1px solid var(--gray-200);background:var(--white);cursor:pointer;font-size:16px;color:var(--gray-400);display:flex;align-items:center;justify-content:center;}
+.modal-body{padding:20px;}
+.report-period{margin-bottom:16px;}
+.rp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding-bottom:6px;border-bottom:2px solid var(--gray-100);}
+.rp-name{font-size:13px;font-weight:600;color:var(--gray-800);}
+.rp-count{font-size:12px;color:var(--gray-400);}
+.report-item{display:flex;align-items:flex-start;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--gray-50);gap:12px;}
+.report-item:last-child{border:none;}
+.ri-left{flex:1;}
+.ri-task{font-size:13px;font-weight:500;color:var(--gray-800);}
+.ri-task.crossed{text-decoration:line-through;color:var(--gray-400);}
+.ri-cat{font-size:11px;color:var(--gray-400);margin-top:1px;}
+.ri-detail{font-size:12px;color:var(--gray-600);margin-top:2px;}
+.ri-time{font-size:11px;color:var(--gray-400);margin-top:1px;}
+.report-textarea{width:100%;min-height:130px;font-size:11px;padding:10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--gray-50);color:var(--gray-800);resize:none;font-family:monospace;margin-top:16px;}
+.copy-btn{width:100%;margin-top:8px;padding:8px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);border:1px solid var(--gray-200);cursor:pointer;background:var(--white);color:var(--gray-800);transition:all .15s;}
+.copy-btn:hover{border-color:var(--gray-400);}
+
+/* OPEN ITEMS */
+.open-items-section{margin-top:16px;padding:12px 14px;background:var(--red-bg);border-radius:var(--radius-sm);border:1px solid #F5C6C2;}
+.oi-title{font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;}
+.oi-item{font-size:12px;color:var(--red);padding:2px 0;}
+
+/* RESPONSIVE */
+@media(max-width:640px){
+  .period-nav{gap:6px;padding:12px 12px 0;}
+  .main{margin:0 12px;padding:16px;}
+  .bottom-bar{margin:12px 12px 16px;}
+  .stats-bar{overflow-x:auto;}
+  .detail-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header class="top-bar">
+  <div class="top-bar-left">
+    <span class="logo">AM <span>Shift Tracker</span></span>
+    <span class="shift-badge" id="shift-badge">Night Shift</span>
+  </div>
+  <div class="top-bar-right">
+    <span class="header-date" id="header-date"></span>
+    <input class="am-name-input" id="am-name" type="text" placeholder="Your name" />
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat-item">
+    <div>
+      <div class="stat-val" id="stat-total">0</div>
+      <div class="stat-lbl">Total tasks</div>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div>
+      <div class="stat-val" id="stat-done">0</div>
+      <div class="stat-lbl">Completed</div>
+    </div>
+  </div>
+  <div class="stat-item">
+    <div>
+      <div class="stat-val" id="stat-open">0</div>
+      <div class="stat-lbl">Remaining</div>
+    </div>
+  </div>
+  <div class="overall-prog">
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="prog-pct" id="prog-pct">0%</div>
+  </div>
+</div>
+
+<div class="period-nav" id="period-nav"></div>
+<div class="main" id="main-content"></div>
+
+<div class="bottom-bar">
+  <button class="reset-btn" onclick="confirmReset()">↺ New shift</button>
+  <div class="bottom-actions">
+    <button class="action-btn" onclick="openReport()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      View report
+    </button>
+    <button class="action-btn primary" onclick="downloadReport()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download report
+    </button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">End-of-shift handoff report</div>
+        <div class="modal-sub" id="modal-sub"></div>
+      </div>
+      <button class="modal-close" onclick="closeReport()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div id="report-visual"></div>
+      <textarea class="report-textarea" id="report-text" readonly></textarea>
+      <button class="copy-btn" id="copy-btn" onclick="copyReport()">Copy to clipboard</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PERIODS = [
+  {id:'p1',name:'P1',time:'18:30 – 22:15',color:'p1',cats:[
+    {cat:'Start up',tasks:[{id:'p1-1',name:'Start up'}]},
+    {cat:'Station issues',tasks:[{id:'p1-2',name:'Station issues'}]},
+    {cat:'Staffing',tasks:[{id:'p1-3',name:'Staffing'}]},
+    {cat:'Engagements',tasks:[{id:'p1-4',name:'Engagements — 30 days+'},{id:'p1-5',name:'Engagements — adapts'}]},
+    {cat:'Floor work',tasks:[{id:'p1-6',name:'2 RBIs'},{id:'p1-7',name:'Time in path (1 hour)'}]},
+    {cat:'Compliance',tasks:[{id:'p1-8',name:'VIA'},{id:'p1-9',name:'Check list'},{id:'p1-10',name:'Sync board P1 data'}]},
+  ]},
+  {id:'p2',name:'P2',time:'22:45 – 02:00',color:'p2',cats:[
+    {cat:'Rate coaching',tasks:[{id:'p2-1',name:'Rate coaching (5 associates)'}]},
+    {cat:'STUs',tasks:[{id:'p2-2',name:'STUs — behavioral'},{id:'p2-3',name:'STUs — break time'}]},
+    {cat:'Floor presence',tasks:[{id:'p2-4',name:'Walk through the walls — AM presence'}]},
+    {cat:'Data & compliance',tasks:[{id:'p2-5',name:'Deep dive data'},{id:'p2-6',name:'Check list'},{id:'p2-7',name:'Sync board P2 data'}]},
+  ]},
+  {id:'p3',name:'P3',time:'02:30 – 05:00',color:'p3',cats:[
+    {cat:'Rate coaching',tasks:[{id:'p3-1',name:'Rate coaching (5 associates)'}]},
+    {cat:'STUs',tasks:[{id:'p3-2',name:'STUs — behavioral'},{id:'p3-3',name:'STUs — break time'}]},
+    {cat:'Data & compliance',tasks:[{id:'p3-4',name:'Deep dive data'},{id:'p3-5',name:'Check list'},{id:'p3-6',name:'Sync board P3 data'}]},
+    {cat:'Handoff',tasks:[{id:'p3-7',name:'Hand off walls in standard'},{id:'p3-8',name:'Hand off notes for next shift'},{id:'p3-9',name:'Hand off chat filled'},{id:'p3-10',name:'Clean area'}]},
+  ]},
+];
+
+const CAT_COLORS = ['#3B6DD4','#7B4FBF','#1A9E6E','#C0682B','#1A7A8A','#8A5C1A'];
+
+function initState(){
+  return PERIODS.map(p=>({...p,cats:p.cats.map(c=>({...c,tasks:c.tasks.map(t=>({...t,done:false,metric:'',notes:'',status:'',completedAt:'',expanded:false}))}))}));
+}
+
+function loadState(){
+  try{const s=localStorage.getItem('am_tracker_v3');return s?JSON.parse(s):initState();}catch(e){return initState();}
+}
+
+let state=loadState();
+let activeP=0;
+
+function save(){try{localStorage.setItem('am_tracker_v3',JSON.stringify(state));}catch(e){}}
+function allTasks(){return state.flatMap(p=>p.cats.flatMap(c=>c.tasks));}
+
+function getTask(pi,ci,ti){return state[pi].cats[ci].tasks[ti];}
+
+// RENDER TABS
+function renderTabs(){
+  const nav=document.getElementById('period-nav');
+  nav.innerHTML=state.map((p,i)=>{
+    const tasks=p.cats.flatMap(c=>c.tasks);
+    const done=tasks.filter(t=>t.done).length;
+    const pct=tasks.length?Math.round(done/tasks.length*100):0;
+    const activeClass=i===activeP?`active-${p.color}`:'';
+    return `<button class="period-tab ${activeClass}" onclick="switchP(${i})">
+      <span class="tab-period-name">${p.name}</span>
+      <span class="tab-time">${p.time}</span>
+      <span class="tab-count">${done} of ${tasks.length} complete</span>
+      <div class="tab-mini-bar"><div class="tab-mini-fill" style="width:${pct}%"></div></div>
+    </button>`;
+  }).join('');
+}
+
+// RENDER MAIN
+function renderMain(){
+  const p=state[activeP];
+  let h='';
+  p.cats.forEach((c,ci)=>{
+    const done=c.tasks.filter(t=>t.done).length;
+    const colorIdx=ci%CAT_COLORS.length;
+    h+=`<div class="cat-section">
+      <div class="cat-header">
+        <div class="cat-dot" style="background:${CAT_COLORS[colorIdx]}"></div>
+        <span class="cat-name">${c.cat}</span>
+        <span class="cat-progress">${done}/${c.tasks.length}</span>
+      </div>`;
+    c.tasks.forEach((t,ti)=>{
+      const checkedClass=t.done?`checked-${p.color}`:'';
+      const doneClass=t.done?'is-done':'';
+      const expandClass=t.expanded?'is-expanded':'';
+      const statusBadge=t.status==='on-track'?'<span class="status-badge sb-on-track">On track</span>':t.status==='at-risk'?'<span class="status-badge sb-at-risk">At risk</span>':t.status==='missed'?'<span class="status-badge sb-missed">Missed</span>':'';
+      h+=`<div class="task-card ${doneClass} ${expandClass}" id="tc-${t.id}">
+        <div class="task-row" onclick="toggleExpand(${activeP},${ci},${ti})">
+          <div class="check-circle ${checkedClass}" onclick="event.stopPropagation();toggleDone(${activeP},${ci},${ti})">
+            <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+          </div>
+          <div class="task-info">
+            <div class="task-name">${t.name}</div>
+            ${t.done&&(t.metric||t.status||t.completedAt)?`<div class="task-inline-meta">
+              ${t.metric?`<span class="task-metric-pill">${t.metric}</span>`:''}
+              ${statusBadge}
+              ${t.completedAt?`<span class="task-time-pill">✓ ${t.completedAt}</span>`:''}
+            </div>`:''}
+          </div>
+          <span class="task-expand-icon ${t.expanded?'open':''}">⌄</span>
+        </div>
+        ${t.expanded?`<div class="task-detail">
+          <div class="detail-grid">
+            <div>
+              <div class="det-label">Metric / value</div>
+              <input class="det-input" type="text" placeholder="e.g. 318 uph, 4/5 coached" value="${t.metric||''}" oninput="setField(${activeP},${ci},${ti},'metric',this.value)"/>
+            </div>
+            <div>
+              <div class="det-label">Status</div>
+              <div class="status-buttons">
+                <button class="st-btn ${t.status==='on-track'?'active-on-track':''}" onclick="setField(${activeP},${ci},${ti},'status','on-track')">On track</button>
+                <button class="st-btn ${t.status==='at-risk'?'active-at-risk':''}" onclick="setField(${activeP},${ci},${ti},'status','at-risk')">At risk</button>
+                <button class="st-btn ${t.status==='missed'?'active-missed':''}" onclick="setField(${activeP},${ci},${ti},'status','missed')">Missed</button>
+              </div>
+            </div>
+            <div class="detail-full">
+              <div class="det-label">Notes</div>
+              <textarea class="det-textarea" placeholder="Context, actions taken, follow-ups…" oninput="setField(${activeP},${ci},${ti},'notes',this.value)">${t.notes||''}</textarea>
+            </div>
+          </div>
+          <button class="mark-btn ${t.done?'mark-incomplete':`mark-complete-${p.color}`}" onclick="toggleDone(${activeP},${ci},${ti})">
+            ${t.done?'Mark incomplete':'Mark complete'}
+          </button>
+        </div>`:''}
+      </div>`;
+    });
+    h+=`</div>`;
+  });
+  document.getElementById('main-content').innerHTML=h;
+  updateStats();
+}
+
+function updateStats(){
+  const all=allTasks();
+  const done=all.filter(t=>t.done).length;
+  const total=all.length;
+  const pct=total?Math.round(done/total*100):0;
+  document.getElementById('stat-total').textContent=total;
+  document.getElementById('stat-done').textContent=done;
+  document.getElementById('stat-open').textContent=total-done;
+  document.getElementById('prog-fill').style.width=pct+'%';
+  document.getElementById('prog-pct').textContent=pct+'%';
+}
+
+function switchP(i){activeP=i;renderTabs();renderMain();}
+
+function toggleExpand(pi,ci,ti){
+  state[pi].cats[ci].tasks[ti].expanded=!state[pi].cats[ci].tasks[ti].expanded;
+  save();renderMain();
+}
+
+function toggleDone(pi,ci,ti){
+  const t=state[pi].cats[ci].tasks[ti];
+  t.done=!t.done;
+  if(t.done){
+    const now=new Date();
+    t.completedAt=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    t.expanded=false;
+  } else {
+    t.completedAt='';
+    t.expanded=true;
+  }
+  save();renderTabs();renderMain();
+}
+
+function setField(pi,ci,ti,f,v){state[pi].cats[ci].tasks[ti][f]=v;save();}
+
+function confirmReset(){
+  if(confirm('Start a new shift? This will clear all completions, notes, and metrics.')){
+    state=initState();
+    save();
+    activeP=0;
+    renderTabs();
+    renderMain();
+  }
+}
+
+// REPORT
+function buildReportText(){
+  const name=document.getElementById('am-name').value||'Area Manager';
+  const d=new Date();
+  const ds=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const ts=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const all=allTasks();
+  const done=all.filter(t=>t.done).length;
+  let txt=`╔══════════════════════════════════════════════════════╗\n`;
+  txt+=`  SHIFT HANDOFF REPORT\n`;
+  txt+=`  AM: ${name}\n`;
+  txt+=`  Date: ${ds}\n`;
+  txt+=`  Generated: ${ts}\n`;
+  txt+=`  Overall: ${done}/${all.length} tasks (${all.length?Math.round(done/all.length*100):0}% complete)\n`;
+  txt+=`╚══════════════════════════════════════════════════════╝\n\n`;
+  state.forEach(p=>{
+    const ptasks=p.cats.flatMap(c=>c.tasks);
+    const pdone=ptasks.filter(t=>t.done).length;
+    txt+=`▌ ${p.name} (${p.time}) — ${pdone}/${ptasks.length} complete\n`;
+    txt+=`${'─'.repeat(54)}\n`;
+    p.cats.forEach(c=>{
+      txt+=`  [${c.cat}]\n`;
+      c.tasks.forEach(t=>{
+        const chk=t.done?'✓':' ';
+        const st=t.status?` · ${t.status.toUpperCase()}`:'';
+        const ct=t.completedAt?` (${t.completedAt})`:'';
+        txt+=`    [${chk}] ${t.name}${st}${ct}\n`;
+        if(t.metric) txt+=`         Metric: ${t.metric}\n`;
+        if(t.notes)  txt+=`         Notes:  ${t.notes}\n`;
+      });
+    });
+    txt+='\n';
+  });
+  const open=all.filter(t=>!t.done);
+  if(open.length){
+    txt+=`⚠ OPEN / INCOMPLETE (${open.length} items)\n`;
+    txt+=`${'─'.repeat(54)}\n`;
+    open.forEach(t=>txt+=`  • ${t.name}\n`);
+    txt+='\n';
+  }
+  txt+=`${'─'.repeat(54)}\n`;
+  txt+=`Pass to incoming AM. End of report.\n`;
+  return txt;
+}
+
+function buildReportHTML(){
+  const all=allTasks();
+  const open=all.filter(t=>!t.done);
+  let h='';
+  state.forEach(p=>{
+    const ptasks=p.cats.flatMap(c=>c.tasks);
+    const pdone=ptasks.filter(t=>t.done).length;
+    const colors={p1:'#3B6DD4',p2:'#7B4FBF',p3:'#1A9E6E'};
+    h+=`<div class="report-period">
+      <div class="rp-header">
+        <span class="rp-name" style="color:${colors[p.color]}">${p.name} · ${p.time}</span>
+        <span class="rp-count">${pdone}/${ptasks.length} complete</span>
+      </div>`;
+    p.cats.forEach(c=>{
+      c.tasks.forEach(t=>{
+        const badge=t.status==='on-track'?'<span class="status-badge sb-on-track">On track</span>':t.status==='at-risk'?'<span class="status-badge sb-at-risk">At risk</span>':t.status==='missed'?'<span class="status-badge sb-missed">Missed</span>':t.done?'<span class="status-badge" style="background:#EEF0F3;color:#5A6270">Done</span>':'<span class="status-badge" style="background:#EEF0F3;color:#9BA3B0">Pending</span>';
+        h+=`<div class="report-item">
+          <div class="ri-left">
+            <div class="ri-task ${t.done?'crossed':''}">${t.name}</div>
+            <div class="ri-cat">${c.cat}${t.metric?' · <strong>'+t.metric+'</strong>':''}</div>
+            ${t.notes?`<div class="ri-detail">${t.notes}</div>`:''}
+            ${t.completedAt?`<div class="ri-time">Completed at ${t.completedAt}</div>`:''}
+          </div>
+          ${badge}
+        </div>`;
+      });
+    });
+    h+=`</div>`;
+  });
+  if(open.length){
+    h+=`<div class="open-items-section"><div class="oi-title">⚠ Open / incomplete — ${open.length} item${open.length>1?'s':''}</div>`;
+    open.forEach(t=>h+=`<div class="oi-item">• ${t.name}</div>`);
+    h+=`</div>`;
+  }
+  return h;
+}
+
+function openReport(){
+  const name=document.getElementById('am-name').value||'Area Manager';
+  const d=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('modal-sub').textContent=`${name} · ${d}`;
+  document.getElementById('report-visual').innerHTML=buildReportHTML();
+  document.getElementById('report-text').value=buildReportText();
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeReport(){document.getElementById('modal').classList.remove('open');}
+
+function copyReport(){
+  const ta=document.getElementById('report-text');
+  ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  const btn=document.getElementById('copy-btn');
+  btn.textContent='Copied!';
+  setTimeout(()=>btn.textContent='Copy to clipboard',2000);
+}
+
+function downloadReport(){
+  const name=document.getElementById('am-name').value||'AM';
+  const d=new Date();
+  const fn=`ShiftReport_${name.replace(/\s+/g,'_')}_${(d.getMonth()+1)}-${d.getDate()}-${d.getFullYear()}.txt`;
+  const b=new Blob([buildReportText()],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b);
+  a.download=fn;
+  a.click();
+}
+
+// INIT
+document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+const savedName=localStorage.getItem('am_name')||'';
+document.getElementById('am-name').value=savedName;
+document.getElementById('am-name').addEventListener('input',e=>localStorage.setItem('am_name',e.target.value));
+renderTabs();
+renderMain();
+</script>
+</body>
+</html>
