@@ -463,9 +463,8 @@ function renderMain(){
           </div>
           <div class="task-info">
             <div class="task-name">${t.name}</div>
-            ${t.done&&(t.metric||t.status||t.completedAt)?`<div class="task-inline-meta">
-              ${t.metric?`<span class="task-metric-pill">${t.metric}</span>`:''}
-              ${statusBadge}
+            ${t.done&&(c.cat==='Start up'?t.completedAt:(t.metric||t.status||t.completedAt))?`<div class="task-inline-meta">
+              ${c.cat==='Start up'?'':`${t.metric?`<span class="task-metric-pill">${t.metric}</span>`:''}${statusBadge}`}
               ${t.completedAt?`<span class="task-time-pill">✓ ${t.completedAt}</span>`:''}
             </div>`:''}
           </div>
@@ -473,6 +472,7 @@ function renderMain(){
         </div>
         ${t.expanded?`<div class="task-detail">
           <div class="detail-grid">
+            ${c.cat==='Start up'?'':`
             <div>
               <div class="det-label">Metric / value</div>
               <input class="det-input" type="text" placeholder="e.g. 318 uph, 4/5 coached" value="${t.metric||''}" oninput="setField(${activeP},${ci},${ti},'metric',this.value)"/>
@@ -484,7 +484,7 @@ function renderMain(){
                 <button class="st-btn ${t.status==='at-risk'?'active-at-risk':''}" onclick="setField(${activeP},${ci},${ti},'status','at-risk')">At risk</button>
                 <button class="st-btn ${t.status==='missed'?'active-missed':''}" onclick="setField(${activeP},${ci},${ti},'status','missed')">Missed</button>
               </div>
-            </div>
+            </div>`}
             <div class="detail-full">
               <div class="det-label">Notes</div>
               <textarea class="det-textarea" placeholder="Context, actions taken, follow-ups…" oninput="setField(${activeP},${ci},${ti},'notes',this.value)">${t.notes||''}</textarea>
