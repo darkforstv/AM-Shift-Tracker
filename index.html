@@ -184,10 +184,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .add-station-btn{font-size:12px;padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--p1);background:var(--p1-light);color:var(--p1);cursor:pointer;font-weight:500;transition:all .15s;}
 .add-station-btn:hover{background:var(--p1);color:#fff;}
 .station-empty{padding:20px;text-align:center;font-size:13px;color:var(--gray-400);}
-.station-item{border-bottom:1px solid var(--gray-100);padding:12px 14px;}
+.station-item{border-bottom:1px solid var(--gray-100);padding:8px 14px;}
 .station-item:last-child{border-bottom:none;}
 .station-item.resolved{background:var(--gray-50);opacity:.7;}
-.station-item-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.station-item-header{display:flex;align-items:center;gap:8px;}
 .station-resolve-btn{width:20px;height:20px;border-radius:50%;border:2px solid var(--gray-200);background:var(--white);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
 .station-resolve-btn:hover{border-color:var(--green);}
 .station-resolve-btn.resolved{background:var(--green);border-color:var(--green);}
@@ -294,8 +294,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 const PERIODS = [
   {id:'p1',name:'P1',time:'18:30 – 22:15',color:'p1',cats:[
     {cat:'Start up',tasks:[{id:'p1-1',name:'Start up'}]},
+    {cat:'Staffing',tasks:[{id:'p1-3',name:'Staffing Goal'}]},
     {cat:'Station issues',tasks:[{id:'p1-2',name:'Station issues'}]},
-    {cat:'Staffing',tasks:[{id:'p1-3',name:'Staffing'}]},
     {cat:'Engagements',tasks:[{id:'p1-4',name:'Engagements — 30 days+'},{id:'p1-5',name:'Engagements — adapts'}]},
     {cat:'Floor work',tasks:[{id:'p1-6',name:'2 RBIs'},{id:'p1-7',name:'Time in path (1 hour)'}]},
     {cat:'Compliance',tasks:[{id:'p1-8',name:'VIA'},{id:'p1-9',name:'Check list'},{id:'p1-10',name:'Sync board P1 data'}]},
@@ -368,26 +368,15 @@ function renderStationTracker(){
   } else {
     stationIssues.forEach(s=>{
       h+=`<div class="station-item${s.resolved?' resolved':''}">
-        <div class="station-item-header">
+        <div class="station-item-header" style="margin-bottom:0;">
           <div class="station-resolve-btn${s.resolved?' resolved':''}" onclick="toggleStationResolved('${s.id}')" title="${s.resolved?'Mark open':'Mark resolved'}">
             <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
           </div>
-          <input class="station-name-input" type="text" placeholder="Station name / number (e.g. A-12, Sort Station 4)" value="${s.name||''}" oninput="setStationField('${s.id}','name',this.value)" ${s.resolved?'disabled':''}/>
+          <input class="station-name-input" type="text" placeholder="Station name / number" value="${s.name||''}" oninput="setStationField('${s.id}','name',this.value)" ${s.resolved?'disabled':''} style="flex:0 0 160px;"/>
+          <input class="station-link-input" type="url" placeholder="Paste ticket URL here" value="${s.ticketUrl||''}" oninput="setStationField('${s.id}','ticketUrl',this.value)" ${s.resolved?'disabled':''} style="flex:1;"/>
+          ${s.ticketUrl?`<a class="station-open-link" href="${s.ticketUrl}" target="_blank" rel="noopener">Open ↗</a>`:''}
           ${s.resolved?`<span class="station-resolved-badge">Resolved ${s.resolvedAt||''}</span>`:''}
           <button class="station-remove-btn" onclick="removeStation('${s.id}')" title="Remove">✕</button>
-        </div>
-        <div class="station-fields">
-          <div>
-            <div class="station-field-label">IT/RME ticket link</div>
-            <div class="station-link-row">
-              <input class="station-link-input" type="url" placeholder="Paste ticket URL here" value="${s.ticketUrl||''}" oninput="setStationField('${s.id}','ticketUrl',this.value)" ${s.resolved?'disabled':''}/>
-              ${s.ticketUrl?`<a class="station-open-link" href="${s.ticketUrl}" target="_blank" rel="noopener">Open ↗</a>`:''}
-            </div>
-          </div>
-          <div>
-            <div class="station-field-label">Notes</div>
-            <textarea class="station-notes-input" placeholder="Issue description, impact, updates…" oninput="setStationField('${s.id}','notes',this.value)" ${s.resolved?'disabled':''}>${s.notes||''}</textarea>
-          </div>
         </div>
       </div>`;
     });
@@ -464,7 +453,7 @@ function renderMain(){
           <div class="task-info">
             <div class="task-name">${t.name}</div>
             ${t.done&&(c.cat==='Start up'?t.completedAt:(t.metric||t.status||t.completedAt))?`<div class="task-inline-meta">
-              ${c.cat==='Start up'?'':`${t.metric?`<span class="task-metric-pill">${t.metric}</span>`:''}${statusBadge}`}
+              ${c.cat==='Start up'?'':`${t.metric?`<span class="task-metric-pill">${t.metric}</span>`:''}${c.cat==='Staffing'?'':statusBadge}`}
               ${t.completedAt?`<span class="task-time-pill">✓ ${t.completedAt}</span>`:''}
             </div>`:''}
           </div>
@@ -472,7 +461,11 @@ function renderMain(){
         </div>
         ${t.expanded?`<div class="task-detail">
           <div class="detail-grid">
-            ${c.cat==='Start up'?'':`
+            ${c.cat==='Start up'?'':c.cat==='Staffing'?`
+            <div class="detail-full">
+              <div class="det-label">Planned walls</div>
+              <input class="det-input" type="text" placeholder="e.g. 4 walls planned" value="${t.metric||''}" oninput="setField(${activeP},${ci},${ti},'metric',this.value)"/>
+            </div>`:`
             <div>
               <div class="det-label">Metric / value</div>
               <input class="det-input" type="text" placeholder="e.g. 318 uph, 4/5 coached" value="${t.metric||''}" oninput="setField(${activeP},${ci},${ti},'metric',this.value)"/>
@@ -589,7 +582,6 @@ function buildReportText(){
       const status=s.resolved?`✓ Resolved ${s.resolvedAt||''}`:'⚠ Open';
       txt+=`  [${s.resolved?'✓':' '}] ${s.name||'Unnamed station'} — ${status}\n`;
       if(s.ticketUrl) txt+=`       Ticket: ${s.ticketUrl}\n`;
-      if(s.notes)     txt+=`       Notes:  ${s.notes}\n`;
     });
     txt+='\n';
   }
@@ -647,7 +639,6 @@ function buildReportHTML(){
         <div class="ri-left">
           <div class="ri-task ${s.resolved?'crossed':''}">${s.name||'Unnamed station'}</div>
           ${s.ticketUrl?`<div class="ri-cat">Ticket: <a href="${s.ticketUrl}" target="_blank" style="color:var(--p1)">${s.ticketUrl}</a></div>`:'<div class="ri-cat">No ticket logged</div>'}
-          ${s.notes?`<div class="ri-detail">${s.notes}</div>`:''}
           ${s.resolvedAt?`<div class="ri-time">Resolved at ${s.resolvedAt}</div>`:''}
         </div>${badge}
       </div>`;
