@@ -5,85 +5,53 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>AM Shift Tracker</title>
 <style>
-:root {
-  --p1: #3B6DD4;
-  --p1-light: #EBF0FB;
-  --p1-mid: #B5C9F0;
-  --p2: #7B4FBF;
-  --p2-light: #F0EBF9;
-  --p2-mid: #C9B5E8;
-  --p3: #1A9E6E;
-  --p3-light: #E6F5F0;
-  --p3-mid: #9FD9C4;
-  --green: #1A7A40;
-  --green-bg: #E8F5ED;
-  --amber: #B85C00;
-  --amber-bg: #FDF3E3;
-  --red: #C0392B;
-  --red-bg: #FDEDEB;
-  --gray-50: #F7F8FA;
-  --gray-100: #EEF0F3;
-  --gray-200: #DDE0E6;
-  --gray-400: #9BA3B0;
-  --gray-600: #5A6270;
-  --gray-800: #1E2330;
-  --white: #FFFFFF;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md: 0 4px 16px rgba(0,0,0,0.10);
-  --radius: 10px;
-  --radius-sm: 6px;
+:root{
+  --p1:#3B6DD4;--p1-light:#EBF0FB;--p1-mid:#B5C9F0;
+  --p2:#7B4FBF;--p2-light:#F0EBF9;--p2-mid:#C9B5E8;
+  --p3:#1A9E6E;--p3-light:#E6F5F0;--p3-mid:#9FD9C4;
+  --green:#1A7A40;--green-bg:#E8F5ED;
+  --amber:#B85C00;--amber-bg:#FDF3E3;
+  --red:#C0392B;--red-bg:#FDEDEB;
+  --gray-50:#F7F8FA;--gray-100:#EEF0F3;--gray-200:#DDE0E6;
+  --gray-400:#9BA3B0;--gray-600:#5A6270;--gray-800:#1E2330;
+  --white:#FFFFFF;
+  --shadow-sm:0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.10);
+  --radius:10px;--radius-sm:6px;
 }
-[data-theme="dark"] {
-  --gray-50: #14161B;
-  --gray-100: #1C1F26;
-  --gray-200: #2A2E37;
-  --gray-400: #6B7280;
-  --gray-600: #9CA3AF;
-  --gray-800: #E8EAED;
-  --white: #1A1D24;
-  --p1-light: #1A2438;
-  --green-bg: #16291D;
-  --amber-bg: #2E2310;
-  --red-bg: #2E1717;
+[data-theme="dark"]{
+  --gray-50:#14161B;--gray-100:#1C1F26;--gray-200:#2A2E37;
+  --gray-400:#6B7280;--gray-600:#9CA3AF;--gray-800:#E8EAED;
+  --white:#1A1D24;--p1-light:#1A2438;
+  --green-bg:#16291D;--amber-bg:#2E2310;--red-bg:#2E1717;
 }
 [data-theme="dark"] body{background:var(--gray-50);}
 [data-theme="dark"] .top-bar{background:#0B0C0F;}
-[data-theme="dark"] .station-link-input{color:#7FA8F0;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--gray-50);color:var(--gray-800);min-height:100vh;transition:background .2s,color .2s;}
 .theme-toggle{width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;transition:all .15s;flex-shrink:0;}
 .theme-toggle:hover{background:rgba(255,255,255,0.16);}
 .theme-toggle svg{width:16px;height:16px;stroke:currentColor;stroke-width:2;fill:none;}
-.theme-toggle .icon-moon{display:block;}
-.theme-toggle .icon-sun{display:none;}
-[data-theme="dark"] .theme-toggle .icon-moon{display:none;}
-[data-theme="dark"] .theme-toggle .icon-sun{display:block;}
-
-/* HEADER */
+.icon-moon{display:block;}.icon-sun{display:none;}
+[data-theme="dark"] .icon-moon{display:none;}[data-theme="dark"] .icon-sun{display:block;}
 .top-bar{background:var(--gray-800);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .top-bar-left{display:flex;align-items:center;gap:12px;}
 .logo{font-size:15px;font-weight:600;color:#fff;letter-spacing:-.3px;}
 .logo span{color:var(--p1-mid);font-weight:400;}
-.shift-badge{font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);}
 .top-bar-right{display:flex;align-items:center;gap:10px;}
 .am-name-input{font-size:13px;padding:5px 10px;border:1px solid rgba(255,255,255,0.2);border-radius:var(--radius-sm);background:rgba(255,255,255,0.08);color:#fff;width:140px;}
 .am-name-input::placeholder{color:rgba(255,255,255,0.4);}
 .am-name-input:focus{outline:none;border-color:rgba(255,255,255,0.4);}
 .header-date{font-size:12px;color:rgba(255,255,255,0.5);}
-
-/* STATS BAR */
-.stats-bar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;display:flex;align-items:center;gap:0;}
-.stat-item{padding:14px 20px;display:flex;align-items:center;gap:8px;border-right:1px solid var(--gray-100);}
+.stats-bar{background:var(--white);border-bottom:1px solid var(--gray-200);padding:0 24px;display:flex;align-items:center;}
+.stat-item{padding:14px 20px;border-right:1px solid var(--gray-100);}
 .stat-item:first-child{padding-left:0;}
 .stat-val{font-size:20px;font-weight:600;color:var(--gray-800);}
 .stat-lbl{font-size:11px;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;}
-.stat-divider{width:1px;background:var(--gray-100);align-self:stretch;}
 .overall-prog{flex:1;padding:14px 20px;display:flex;align-items:center;gap:10px;}
 .prog-track{flex:1;height:6px;background:var(--gray-100);border-radius:3px;overflow:hidden;}
 .prog-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3));transition:width .4s ease;}
 .prog-pct{font-size:13px;font-weight:600;color:var(--gray-800);min-width:36px;text-align:right;}
-
-/* PERIOD TABS */
 .period-nav{padding:20px 24px 0;display:flex;gap:10px;}
 .period-tab{flex:1;padding:14px 16px;border-radius:var(--radius) var(--radius) 0 0;border:1px solid var(--gray-200);border-bottom:none;background:var(--white);cursor:pointer;text-align:left;transition:all .15s;position:relative;bottom:-1px;}
 .period-tab:hover{background:var(--gray-50);}
@@ -100,18 +68,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .period-tab:not([class*="active"]) .tab-period-name{color:var(--gray-800);}
 .period-tab:not([class*="active"]) .tab-time{color:var(--gray-400);}
 .period-tab:not([class*="active"]) .tab-count{color:var(--gray-400);}
-
-/* MAIN CONTENT */
 .main{background:var(--white);border:1px solid var(--gray-200);border-radius:0 0 var(--radius) var(--radius);margin:0 24px;padding:24px;min-height:400px;}
-
-/* CATEGORY */
 .cat-section{margin-bottom:20px;}
 .cat-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
 .cat-dot{width:8px;height:8px;border-radius:50%;}
 .cat-name{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--gray-400);}
 .cat-progress{font-size:11px;color:var(--gray-400);}
-
-/* TASK CARDS */
 .task-card{border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);margin-bottom:6px;transition:border-color .15s,box-shadow .15s;}
 .task-card:hover{border-color:var(--gray-400);box-shadow:var(--shadow-sm);}
 .task-card.is-done{background:var(--gray-50);border-color:var(--gray-100);}
@@ -136,8 +98,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .sb-missed{background:var(--red-bg);color:var(--red);}
 .task-expand-icon{font-size:16px;color:var(--gray-400);transition:transform .2s;flex-shrink:0;line-height:1;}
 .task-expand-icon.open{transform:rotate(180deg);}
-
-/* TASK DETAIL */
 .task-detail{border-top:1px solid var(--gray-100);padding:14px;background:var(--gray-50);}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
 .detail-full{grid-column:1/-1;}
@@ -152,23 +112,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .st-btn.active-on-track{background:var(--green-bg);color:var(--green);border-color:var(--green);}
 .st-btn.active-at-risk{background:var(--amber-bg);color:var(--amber);border-color:var(--amber);}
 .st-btn.active-missed{background:var(--red-bg);color:var(--red);border-color:var(--red);}
-.mark-btn{width:100%;padding:8px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);border:none;cursor:pointer;transition:all .15s;}
-.mark-complete-p1{background:var(--p1);color:#fff;}
-.mark-complete-p2{background:var(--p2);color:#fff;}
-.mark-complete-p3{background:var(--p3);color:#fff;}
-.mark-incomplete{background:var(--gray-100);color:var(--gray-600);}
-
-/* BOTTOM BAR */
+.st-btn.active-engaged{background:var(--green-bg);color:var(--green);border-color:var(--green);}
 .bottom-bar{margin:16px 24px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
-.bottom-actions{display:flex;gap:8px;}
 .action-btn{padding:8px 18px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);border:1px solid var(--gray-200);cursor:pointer;background:var(--white);color:var(--gray-800);display:flex;align-items:center;gap:7px;transition:all .15s;}
 .action-btn:hover{border-color:var(--gray-400);box-shadow:var(--shadow-sm);}
 .action-btn.primary{background:var(--gray-800);color:#fff;border-color:var(--gray-800);}
 .action-btn.primary:hover{background:#111;}
 .reset-btn{padding:8px 14px;font-size:12px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);cursor:pointer;background:var(--white);color:var(--gray-400);transition:all .15s;}
 .reset-btn:hover{border-color:var(--red);color:var(--red);}
-
-/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--white);border-radius:var(--radius);width:100%;max-width:580px;max-height:85vh;overflow-y:auto;box-shadow:var(--shadow-md);}
@@ -192,46 +143,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .report-textarea{width:100%;min-height:130px;font-size:11px;padding:10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--gray-50);color:var(--gray-800);resize:none;font-family:monospace;margin-top:16px;}
 .copy-btn{width:100%;margin-top:8px;padding:8px;font-size:13px;font-weight:500;border-radius:var(--radius-sm);border:1px solid var(--gray-200);cursor:pointer;background:var(--white);color:var(--gray-800);transition:all .15s;}
 .copy-btn:hover{border-color:var(--gray-400);}
-
-/* OPEN ITEMS */
 .open-items-section{margin-top:16px;padding:12px 14px;background:var(--red-bg);border-radius:var(--radius-sm);border:1px solid #F5C6C2;}
 .oi-title{font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;}
 .oi-item{font-size:12px;color:var(--red);padding:2px 0;}
-
-/* STATION ISSUES */
-.station-tracker{border:1px solid var(--gray-200);border-radius:var(--radius-sm);overflow:hidden;}
-.station-tracker-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);}
-.station-tracker-title{font-size:13px;font-weight:600;color:var(--gray-800);}
-.station-count-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--amber-bg);color:var(--amber);font-weight:500;}
-.station-count-badge.all-clear{background:var(--green-bg);color:var(--green);}
-.add-station-btn{font-size:12px;padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--p1);background:var(--p1-light);color:var(--p1);cursor:pointer;font-weight:500;transition:all .15s;}
-.add-station-btn:hover{background:var(--p1);color:#fff;}
-.station-empty{padding:20px;text-align:center;font-size:13px;color:var(--gray-400);}
-.station-item{border-bottom:1px solid var(--gray-100);padding:8px 14px;}
-.station-item:last-child{border-bottom:none;}
-.station-item.resolved{background:var(--gray-50);opacity:.7;}
-.station-item-header{display:flex;align-items:center;gap:8px;}
-.station-resolve-btn{width:20px;height:20px;border-radius:50%;border:2px solid var(--gray-200);background:var(--white);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
-.station-resolve-btn:hover{border-color:var(--green);}
-.station-resolve-btn.resolved{background:var(--green);border-color:var(--green);}
-.station-resolve-btn svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none;display:none;}
-.station-resolve-btn.resolved svg{display:block;}
-.station-name-input{flex:1;font-size:13px;font-weight:500;padding:5px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);}
-.station-name-input:focus{outline:none;border-color:var(--gray-400);}
-.station-resolved-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--green-bg);color:var(--green);font-weight:500;white-space:nowrap;}
-.station-remove-btn{width:24px;height:24px;border-radius:50%;border:none;background:none;cursor:pointer;color:var(--gray-400);font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .15s;}
-.station-remove-btn:hover{color:var(--red);}
-.station-fields{display:grid;grid-template-columns:1fr;gap:8px;padding-left:30px;}
-.station-field-label{font-size:11px;font-weight:500;color:var(--gray-400);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px;}
-.station-link-input{width:100%;font-size:12px;padding:6px 10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--p1);font-family:inherit;}
-.station-link-input:focus{outline:none;border-color:var(--gray-400);}
-.station-notes-input{width:100%;font-size:12px;padding:6px 10px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);resize:none;min-height:50px;font-family:inherit;}
-.station-notes-input:focus{outline:none;border-color:var(--gray-400);}
-.station-link-row{display:flex;align-items:center;gap:6px;}
-.station-open-link{font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white);color:var(--p1);cursor:pointer;text-decoration:none;white-space:nowrap;transition:all .15s;}
-.station-open-link:hover{background:var(--p1-light);}
-
-/* RESPONSIVE */
+/* TRACKER (station + coaching) */
+.tracker-box{border:1px solid var(--gray-200);border-radius:var(--radius-sm);overflow:hidden;}
+.tracker-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--gray-50);border-bottom:1px solid var(--gray-200);}
+.tracker-title{font-size:13px;font-weight:600;color:var(--gray-800);}
+.tracker-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500;background:var(--amber-bg);color:var(--amber);}
+.tracker-badge.all-clear{background:var(--green-bg);color:var(--green);}
+.tracker-add-btn{font-size:12px;padding:5px 12px;border-radius:var(--radius-sm);border:1px solid var(--p1);background:var(--p1-light);color:var(--p1);cursor:pointer;font-weight:500;transition:all .15s;}
+.tracker-add-btn:hover{background:var(--p1);color:#fff;}
+.tracker-empty{padding:20px;text-align:center;font-size:13px;color:var(--gray-400);}
+.tracker-entry{border-bottom:1px solid var(--gray-100);padding:10px 14px;}
+.tracker-entry:last-child{border-bottom:none;}
+.tracker-entry.resolved{background:var(--gray-50);opacity:.65;}
+.entry-top{display:flex;align-items:center;gap:8px;margin-bottom:0;}
+.resolve-circle{width:20px;height:20px;border-radius:50%;border:2px solid var(--gray-200);background:var(--white);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.resolve-circle:hover{border-color:var(--green);}
+.resolve-circle.done{background:var(--green);border-color:var(--green);}
+.resolve-circle svg{width:10px;height:10px;stroke:#fff;stroke-width:2.5;fill:none;display:none;}
+.resolve-circle.done svg{display:block;}
+.entry-label{font-size:12px;font-weight:600;color:var(--gray-400);flex:1;}
+.remove-btn{width:22px;height:22px;border-radius:50%;border:none;background:none;cursor:pointer;color:var(--gray-400);font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .15s;}
+.remove-btn:hover{color:var(--red);}
+.resolved-badge{font-size:11px;padding:2px 8px;border-radius:20px;background:var(--green-bg);color:var(--green);font-weight:500;white-space:nowrap;}
+.f-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);margin-bottom:3px;}
+.f-input{width:100%;font-size:12px;padding:5px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);}
+.f-input:focus{outline:none;border-color:var(--gray-400);}
+.f-input:disabled{background:var(--gray-50);color:var(--gray-400);}
+.f-url{color:var(--p1);}
+.f-ta{width:100%;font-size:12px;padding:5px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);resize:none;min-height:48px;font-family:inherit;}
+.f-ta:focus{outline:none;border-color:var(--gray-400);}
+.f-ta:disabled{background:var(--gray-50);color:var(--gray-400);}
+.open-link{font-size:11px;padding:4px 8px;border-radius:var(--radius-sm);border:1px solid var(--gray-200);background:var(--white);color:var(--p1);cursor:pointer;text-decoration:none;white-space:nowrap;transition:all .15s;}
+.open-link:hover{background:var(--p1-light);}
 @media(max-width:640px){
   .period-nav{gap:6px;padding:12px 12px 0;}
   .main{margin:0 12px;padding:16px;}
@@ -242,7 +188,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </style>
 </head>
 <body>
-
 <header class="top-bar">
   <div class="top-bar-left">
     <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
@@ -256,40 +201,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <input class="am-name-input" id="am-name" type="text" placeholder="Your name" />
   </div>
 </header>
-
 <div class="stats-bar">
-  <div class="stat-item">
-    <div>
-      <div class="stat-val" id="stat-total">0</div>
-      <div class="stat-lbl">Total tasks</div>
-    </div>
-  </div>
-  <div class="stat-item">
-    <div>
-      <div class="stat-val" id="stat-done">0</div>
-      <div class="stat-lbl">Completed</div>
-    </div>
-  </div>
-  <div class="stat-item">
-    <div>
-      <div class="stat-val" id="stat-open">0</div>
-      <div class="stat-lbl">Remaining</div>
-    </div>
-  </div>
+  <div class="stat-item"><div class="stat-val" id="stat-total">0</div><div class="stat-lbl">Total tasks</div></div>
+  <div class="stat-item"><div class="stat-val" id="stat-done">0</div><div class="stat-lbl">Completed</div></div>
+  <div class="stat-item"><div class="stat-val" id="stat-open">0</div><div class="stat-lbl">Remaining</div></div>
   <div class="overall-prog">
     <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
     <div class="prog-pct" id="prog-pct">0%</div>
   </div>
 </div>
-
 <div class="period-nav" id="period-nav"></div>
 <div class="main" id="main-content"></div>
-
 <div class="bottom-bar">
-  <button class="reset-btn" onclick="confirmReset()">↺ New shift</button>
-  <div class="bottom-actions">
+  <button class="reset-btn" onclick="confirmReset()">&#8634; New shift</button>
+  <div style="display:flex;gap:8px;">
     <button class="action-btn" onclick="openReport()">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
       View report
     </button>
     <button class="action-btn primary" onclick="downloadReport()">
@@ -298,7 +225,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </button>
   </div>
 </div>
-
 <div class="modal-overlay" id="modal">
   <div class="modal">
     <div class="modal-header">
@@ -306,7 +232,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="modal-title">End-of-shift handoff report</div>
         <div class="modal-sub" id="modal-sub"></div>
       </div>
-      <button class="modal-close" onclick="closeReport()">✕</button>
+      <button class="modal-close" onclick="closeReport()">&#10005;</button>
     </div>
     <div class="modal-body">
       <div id="report-visual"></div>
@@ -315,223 +241,372 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
 </div>
-
 <script>
-const PERIODS = [
-  {id:'p1',name:'P1',time:'18:30 – 22:15',color:'p1',cats:[
+var PERIODS = [
+  {id:'p1',name:'P1',time:'18:30 - 22:15',color:'p1',cats:[
     {cat:'Start up',tasks:[{id:'p1-1',name:'Start up'}]},
     {cat:'Staffing',tasks:[{id:'p1-3',name:'Staffing Goal'}]},
     {cat:'Station issues',tasks:[]},
-    {cat:'Engagements',tasks:[{id:'p1-4',name:'Engagements — 30 days+'},{id:'p1-5',name:'Engagements — adapts'}]},
-    {cat:'Admin Work',tasks:[{id:'p1-6',name:'2 RBIs'},{id:'p1-7',name:'Time in Path (1 hour)'},{id:'p1-8',name:'VIA - Voice in Action'},{id:'p1-9',name:'Standard Work Checklist'},{id:'p1-10',name:'Update Virtual Sync Board - P1 data'}]},
+    {cat:'Engagements',tasks:[{id:'p1-4',name:'Engagements - 30 days+'},{id:'p1-5',name:'Engagements - adapts'}]},
+    {cat:'Admin Work',tasks:[
+      {id:'p1-6',name:'2 RBIs'},
+      {id:'p1-7',name:'Time in Path (1 hour)'},
+      {id:'p1-8',name:'VIA - Voice in Action'},
+      {id:'p1-9',name:'Standard Work Checklist'},
+      {id:'p1-10',name:'Update Virtual Sync Board - P1 data'}
+    ]}
   ]},
-  {id:'p2',name:'P2',time:'22:45 – 02:00',color:'p2',cats:[
-    {cat:'Rate coaching',tasks:[{id:'p2-1',name:'Rate coaching (5 associates)'}]},
-    {cat:'STUs',tasks:[{id:'p2-2',name:'STUs — behavioral'},{id:'p2-3',name:'STUs — break time'}]},
-    {cat:'Floor presence',tasks:[{id:'p2-4',name:'Walk through the walls — AM presence'}]},
-    {cat:'Data & compliance',tasks:[{id:'p2-5',name:'Deep dive data'},{id:'p2-6',name:'Check list'},{id:'p2-7',name:'Sync board P2 data'}]},
+  {id:'p2',name:'P2',time:'22:45 - 02:00',color:'p2',cats:[
+    {cat:'Rate coaching',tasks:[]},
+    {cat:'STUs - behavioral',tasks:[]},
+    {cat:'STUs - break time',tasks:[]},
+    {cat:'Floor presence',tasks:[{id:'p2-4',name:'Walk through the walls - AM presence'}]},
+    {cat:'Data & compliance',tasks:[{id:'p2-5',name:'Deep dive data'},{id:'p2-6',name:'Check list'},{id:'p2-7',name:'Sync board P2 data'}]}
   ]},
-  {id:'p3',name:'P3',time:'02:30 – 05:00',color:'p3',cats:[
-    {cat:'Rate coaching',tasks:[{id:'p3-1',name:'Rate coaching (5 associates)'}]},
-    {cat:'STUs',tasks:[{id:'p3-2',name:'STUs — behavioral'},{id:'p3-3',name:'STUs — break time'}]},
+  {id:'p3',name:'P3',time:'02:30 - 05:00',color:'p3',cats:[
+    {cat:'Rate coaching',tasks:[]},
+    {cat:'STUs - behavioral',tasks:[]},
+    {cat:'STUs - break time',tasks:[]},
     {cat:'Data & compliance',tasks:[{id:'p3-4',name:'Deep dive data'},{id:'p3-5',name:'Check list'},{id:'p3-6',name:'Sync board P3 data'}]},
-    {cat:'Handoff',tasks:[{id:'p3-7',name:'Hand off walls in standard'},{id:'p3-8',name:'Hand off notes for next shift'},{id:'p3-9',name:'Hand off chat filled'},{id:'p3-10',name:'Clean area'}]},
-  ]},
+    {cat:'Handoff',tasks:[
+      {id:'p3-7',name:'Hand off walls in standard'},
+      {id:'p3-8',name:'Hand off notes for next shift'},
+      {id:'p3-9',name:'Hand off chat filled'},
+      {id:'p3-10',name:'Clean area'}
+    ]}
+  ]}
 ];
 
-const CAT_COLORS = ['#3B6DD4','#7B4FBF','#1A9E6E','#C0682B','#1A7A8A','#8A5C1A'];
+var CAT_COLORS = ['#3B6DD4','#7B4FBF','#1A9E6E','#C0682B','#1A7A8A','#8A5C1A'];
 
 function initState(){
-  return PERIODS.map(p=>({...p,cats:p.cats.map(c=>({...c,tasks:c.tasks.map(t=>({...t,done:false,metric:'',notes:'',status:'',completedAt:'',expanded:false}))}))}));
+  return PERIODS.map(function(p){
+    return Object.assign({},p,{cats:p.cats.map(function(c){
+      return Object.assign({},c,{tasks:c.tasks.map(function(t){
+        return Object.assign({},t,{done:false,metric:'',notes:'',status:'',completedAt:'',expanded:false});
+      })});
+    })});
+  });
 }
 
-// STATION ISSUES STATE
-let stationIssues = (()=>{try{const s=localStorage.getItem('am_stations_v2');return s?JSON.parse(s):[];}catch(e){return [];}})();
+var stationIssues = (function(){try{var s=localStorage.getItem('am_stations_v2');return s?JSON.parse(s):[];}catch(e){return [];}})();
 function saveStations(){try{localStorage.setItem('am_stations_v2',JSON.stringify(stationIssues));}catch(e){}}
 
-function addStation(){
-  stationIssues.push({id:'st-'+Date.now(),name:'',ticketUrl:'',notes:'',resolved:false,addedAt:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})});
-  saveStations();
-  renderMain();
+var coachingLogs = (function(){try{var s=localStorage.getItem('am_coaching_v1');return s?JSON.parse(s):{p2:[],p3:[]};}catch(e){return {p2:[],p3:[]};}}());
+function saveCoaching(){try{localStorage.setItem('am_coaching_v1',JSON.stringify(coachingLogs));}catch(e){}}
+
+var stuLogs = (function(){try{var s=localStorage.getItem('am_stu_v1');return s?JSON.parse(s):{p2b:[],p2br:[],p3b:[],p3br:[]};}catch(e){return {p2b:[],p2br:[],p3b:[],p3br:[]};}}());
+function saveStu(){try{localStorage.setItem('am_stu_v1',JSON.stringify(stuLogs));}catch(e){}}
+
+function stuKey(pid,cat){
+  if(pid==='p2'&&cat==='STUs - behavioral')return 'p2b';
+  if(pid==='p2'&&cat==='STUs - break time')return 'p2br';
+  if(pid==='p3'&&cat==='STUs - behavioral')return 'p3b';
+  return 'p3br';
+}
+function addStu(key){
+  if(!stuLogs[key])stuLogs[key]=[];
+  stuLogs[key].push({id:'stu-'+Date.now(),login:'',notes:'',done:false});
+  saveStu();renderMain();
+}
+function removeStu(key,sid){
+  if(!confirm('Remove this STU entry?'))return;
+  stuLogs[key]=stuLogs[key].filter(function(s){return s.id!==sid;});
+  saveStu();renderMain();
+}
+function toggleStuDone(key,sid){
+  var e=stuLogs[key].find(function(s){return s.id===sid;});
+  if(e)e.done=!e.done;
+  saveStu();renderMain();
+}
+function setStuField(key,sid,field,val){
+  var e=stuLogs[key].find(function(s){return s.id===sid;});
+  if(e)e[field]=val;saveStu();
 }
 
+function addStation(){
+  stationIssues.push({id:'st-'+Date.now(),name:'',ticketUrl:'',resolved:false,addedAt:new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})});
+  saveStations();renderMain();
+}
 function removeStation(sid){
   if(!confirm('Remove this station entry?'))return;
-  stationIssues=stationIssues.filter(s=>s.id!==sid);
-  saveStations();
-  renderMain();
+  stationIssues=stationIssues.filter(function(s){return s.id!==sid;});
+  saveStations();renderMain();
 }
-
 function toggleStationResolved(sid){
-  const s=stationIssues.find(s=>s.id===sid);
+  var s=stationIssues.find(function(x){return x.id===sid;});
   if(s){s.resolved=!s.resolved;s.resolvedAt=s.resolved?new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}):'';}
-  saveStations();
-  renderMain();
+  saveStations();renderMain();
 }
-
 function setStationField(sid,field,val){
-  const s=stationIssues.find(s=>s.id===sid);
-  if(s){s[field]=val;}
-  saveStations();
+  var s=stationIssues.find(function(x){return x.id===sid;});
+  if(s){s[field]=val;}saveStations();
 }
 
-function renderStationTracker(){
-  const open=stationIssues.filter(s=>!s.resolved).length;
-  const total=stationIssues.length;
-  const badgeClass=open===0&&total>0?'all-clear':'';
-  const badgeText=total===0?'No issues logged':open===0?'All resolved':`${open} open`;
-  let h=`<div class="station-tracker">
-    <div class="station-tracker-header">
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span class="station-tracker-title">Station issues</span>
-        <span class="station-count-badge ${badgeClass}">${badgeText}</span>
-      </div>
-      <button class="add-station-btn" onclick="addStation()">+ Add station</button>
-    </div>`;
-  if(stationIssues.length===0){
-    h+=`<div class="station-empty">No station issues logged. Tap "+ Add station" to log a downed station.</div>`;
+function addCoaching(pid){
+  if(!coachingLogs[pid])coachingLogs[pid]=[];
+  coachingLogs[pid].push({id:'c-'+Date.now(),login:'',rateBefore:'',cycletime:'',rateAfter:'',notes:'',done:false});
+  saveCoaching();renderMain();
+}
+function removeCoaching(pid,cid){
+  if(!confirm('Remove this coaching entry?'))return;
+  coachingLogs[pid]=coachingLogs[pid].filter(function(c){return c.id!==cid;});
+  saveCoaching();renderMain();
+}
+function toggleCoachingDone(pid,cid){
+  var e=coachingLogs[pid].find(function(c){return c.id===cid;});
+  if(e)e.done=!e.done;
+  saveCoaching();renderMain();
+}
+function setCoachingField(pid,cid,field,val){
+  var e=coachingLogs[pid].find(function(c){return c.id===cid;});
+  if(e)e[field]=val;saveCoaching();
+}
+
+function renderStuTracker(key,label){
+  var entries=stuLogs[key]||[];
+  var done=entries.filter(function(e){return e.done;}).length;
+  var h='<div class="tracker-box">';
+  h+='<div class="tracker-head">';
+  h+='<div style="display:flex;align-items:center;gap:8px;"><span class="tracker-title">'+label+'</span>';
+  h+='<span class="tracker-badge'+(done>0&&done===entries.length?' all-clear':'')+'">'+done+' done</span></div>';
+  h+='<button class="tracker-add-btn" onclick="addStu(\''+key+'\')">+ Add STU</button>';
+  h+='</div>';
+  if(!entries.length){
+    h+='<div class="tracker-empty">No STUs logged. Tap "+ Add STU" to log an entry.</div>';
   } else {
-    stationIssues.forEach(s=>{
-      h+=`<div class="station-item${s.resolved?' resolved':''}">
-        <div class="station-item-header" style="margin-bottom:0;">
-          <div class="station-resolve-btn${s.resolved?' resolved':''}" onclick="toggleStationResolved('${s.id}')" title="${s.resolved?'Mark open':'Mark resolved'}">
-            <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
-          </div>
-          <input class="station-name-input" type="text" placeholder="Station name / number" value="${s.name||''}" oninput="setStationField('${s.id}','name',this.value)" ${s.resolved?'disabled':''} style="flex:0 0 160px;"/>
-          <input class="station-link-input" type="url" placeholder="Paste ticket URL here" value="${s.ticketUrl||''}" oninput="setStationField('${s.id}','ticketUrl',this.value)" ${s.resolved?'disabled':''} style="flex:1;"/>
-          ${s.ticketUrl?`<a class="station-open-link" href="${s.ticketUrl}" target="_blank" rel="noopener">Open ↗</a>`:''}
-          ${s.resolved?`<span class="station-resolved-badge">Resolved ${s.resolvedAt||''}</span>`:''}
-          <button class="station-remove-btn" onclick="removeStation('${s.id}')" title="Remove">✕</button>
-        </div>
-      </div>`;
+    entries.forEach(function(e,idx){
+      var rc=e.done?'resolve-circle done':'resolve-circle';
+      h+='<div class="tracker-entry'+(e.done?' resolved':'')+'">';
+      h+='<div class="entry-top" style="margin-bottom:8px;">';
+      h+='<div class="'+rc+'" onclick="toggleStuDone(\''+key+'\',\''+e.id+'\')">';
+      h+='<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>';
+      h+='<span class="entry-label">STU '+(idx+1)+'</span>';
+      h+='<button class="remove-btn" onclick="removeStu(\''+key+'\',\''+e.id+'\')">&#10005;</button>';
+      h+='</div>';
+      h+='<div style="display:grid;grid-template-columns:1fr;gap:8px;padding-left:28px;">';
+      h+='<div><div class="f-label">Associate login</div>';
+      h+='<input class="f-input" type="text" placeholder="e.g. amzn1.user.xyz" value="'+(e.login||'')+'" oninput="setStuField(\''+key+'\',\''+e.id+'\',\'login\',this.value)"'+(e.done?' disabled':'')+'/></div>';
+      h+='<div><div class="f-label">Notes</div>';
+      h+='<textarea class="f-ta" placeholder="Behavior observed, action taken..." oninput="setStuField(\''+key+'\',\''+e.id+'\',\'notes\',this.value)"'+(e.done?' disabled':'')+'>'+( e.notes||'')+'</textarea></div>';
+      h+='</div></div>';
     });
   }
-  h+=`</div>`;
+  h+='</div>';
   return h;
 }
 
 function loadState(){
-  try{const s=localStorage.getItem('am_tracker_v4');return s?JSON.parse(s):initState();}catch(e){return initState();}
+  try{var s=localStorage.getItem('am_tracker_v4');return s?JSON.parse(s):initState();}catch(e){return initState();}
+}
+var state=loadState();
+var activeP=0;
+function save(){try{localStorage.setItem('am_tracker_v4',JSON.stringify(state));}catch(e){}}
+function allTasks(){return state.reduce(function(a,p){return a.concat(p.cats.reduce(function(b,c){return b.concat(c.tasks);},[]));},[]);}
+
+function renderStationTracker(){
+  var open=stationIssues.filter(function(s){return !s.resolved;}).length;
+  var total=stationIssues.length;
+  var badgeText=total===0?'No issues logged':open===0?'All resolved':open+' open';
+  var badgeClass=open===0&&total>0?'all-clear':'';
+  var h='<div class="tracker-box">';
+  h+='<div class="tracker-head">';
+  h+='<div style="display:flex;align-items:center;gap:8px;"><span class="tracker-title">Station issues</span>';
+  h+='<span class="tracker-badge '+badgeClass+'">'+badgeText+'</span></div>';
+  h+='<button class="tracker-add-btn" onclick="addStation()">+ Add station</button>';
+  h+='</div>';
+  if(total===0){
+    h+='<div class="tracker-empty">No station issues logged. Tap "+ Add station" to log a downed station.</div>';
+  } else {
+    stationIssues.forEach(function(s){
+      var rc=s.resolved?'resolve-circle done':'resolve-circle';
+      h+='<div class="tracker-entry'+(s.resolved?' resolved':'')+'">';
+      h+='<div class="entry-top">';
+      h+='<div class="'+rc+'" onclick="toggleStationResolved(\''+s.id+'\')">';
+      h+='<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>';
+      h+='<input class="f-input" style="flex:0 0 150px;" type="text" placeholder="Station name/number" value="'+(s.name||'')+'" oninput="setStationField(\''+s.id+'\',\'name\',this.value)"'+(s.resolved?' disabled':'')+'/>';
+      h+='<input class="f-input f-url" style="flex:1;" type="url" placeholder="Paste ticket URL here" value="'+(s.ticketUrl||'')+'" oninput="setStationField(\''+s.id+'\',\'ticketUrl\',this.value)"'+(s.resolved?' disabled':'')+'/>';
+      if(s.ticketUrl)h+='<a class="open-link" href="'+s.ticketUrl+'" target="_blank" rel="noopener">Open</a>';
+      if(s.resolved)h+='<span class="resolved-badge">Resolved '+(s.resolvedAt||'')+'</span>';
+      h+='<button class="remove-btn" onclick="removeStation(\''+s.id+'\')">&#10005;</button>';
+      h+='</div></div>';
+    });
+  }
+  h+='</div>';
+  return h;
 }
 
-let state=loadState();
-let activeP=0;
+function renderCoachingTracker(pid){
+  var entries=coachingLogs[pid]||[];
+  var done=entries.filter(function(e){return e.done;}).length;
+  var total=entries.length;
+  var badgeText=done+' / 5 complete';
+  var badgeClass=done===5?'all-clear':'';
+  var h='<div class="tracker-box">';
+  h+='<div class="tracker-head">';
+  h+='<div style="display:flex;align-items:center;gap:8px;"><span class="tracker-title">Rate coaching</span>';
+  h+='<span class="tracker-badge '+badgeClass+'">'+badgeText+'</span></div>';
+  if(total<5){
+    h+='<button class="tracker-add-btn" onclick="addCoaching(\''+pid+'\')">+ Add coaching</button>';
+  } else {
+    h+='<span style="font-size:11px;color:var(--gray-400)">5 / 5 reached</span>';
+  }
+  h+='</div>';
+  if(total===0){
+    h+='<div class="tracker-empty">No coaching logged. Tap "+ Add coaching" to log a session.</div>';
+  } else {
+    entries.forEach(function(e,idx){
+      var rc=e.done?'resolve-circle done':'resolve-circle';
+      h+='<div class="tracker-entry'+(e.done?' resolved':'')+'">';
+      h+='<div class="entry-top" style="margin-bottom:8px;">';
+      h+='<div class="'+rc+'" onclick="toggleCoachingDone(\''+pid+'\',\''+e.id+'\')">';
+      h+='<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>';
+      h+='<span class="entry-label">Associate '+(idx+1)+'</span>';
+      h+='<button class="remove-btn" onclick="removeCoaching(\''+pid+'\',\''+e.id+'\')">&#10005;</button>';
+      h+='</div>';
+      h+='<div style="display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:8px;padding-left:28px;margin-bottom:8px;">';
+      h+='<div><div class="f-label">Associate login</div><input class="f-input" type="text" placeholder="e.g. amzn1.user.xyz" value="'+(e.login||'')+'" oninput="setCoachingField(\''+pid+'\',\''+e.id+'\',\'login\',this.value)"'+(e.done?' disabled':'')+'/></div>';
+      h+='<div><div class="f-label">Rate before</div><input class="f-input" type="text" placeholder="e.g. 85 uph" value="'+(e.rateBefore||'')+'" oninput="setCoachingField(\''+pid+'\',\''+e.id+'\',\'rateBefore\',this.value)"'+(e.done?' disabled':'')+'/></div>';
+      h+='<div><div class="f-label">Cycle time (sec)</div><input class="f-input" type="text" placeholder="e.g. 42s" value="'+(e.cycletime||'')+'" oninput="setCoachingField(\''+pid+'\',\''+e.id+'\',\'cycletime\',this.value)"'+(e.done?' disabled':'')+'/></div>';
+      h+='<div><div class="f-label">Rate after</div><input class="f-input" type="text" placeholder="e.g. 110 uph" value="'+(e.rateAfter||'')+'" oninput="setCoachingField(\''+pid+'\',\''+e.id+'\',\'rateAfter\',this.value)"'+(e.done?' disabled':'')+'/></div>';
+      h+='</div>';
+      h+='<div style="padding-left:28px;"><div class="f-label">Notes</div>';
+      h+='<textarea class="f-ta" placeholder="Coaching notes, behavior observed..." oninput="setCoachingField(\''+pid+'\',\''+e.id+'\',\'notes\',this.value)"'+(e.done?' disabled':'')+'>'+( e.notes||'')+'</textarea></div>';
+      h+='</div>';
+    });
+  }
+  h+='</div>';
+  return h;
+}
 
-function save(){try{localStorage.setItem('am_tracker_v4',JSON.stringify(state));}catch(e){}}
-function allTasks(){return state.flatMap(p=>p.cats.flatMap(c=>c.tasks));}
-
-function getTask(pi,ci,ti){return state[pi].cats[ci].tasks[ti];}
-
-// RENDER TABS
 function renderTabs(){
-  const nav=document.getElementById('period-nav');
-  nav.innerHTML=state.map((p,i)=>{
-    const tasks=p.cats.flatMap(c=>c.tasks);
-    const done=tasks.filter(t=>t.done).length;
-    const pct=tasks.length?Math.round(done/tasks.length*100):0;
-    const activeClass=i===activeP?`active-${p.color}`:'';
-    return `<button class="period-tab ${activeClass}" onclick="switchP(${i})">
-      <span class="tab-period-name">${p.name}</span>
-      <span class="tab-time">${p.time}</span>
-      <span class="tab-count">${done} of ${tasks.length} complete</span>
-      <div class="tab-mini-bar"><div class="tab-mini-fill" style="width:${pct}%"></div></div>
-    </button>`;
+  var nav=document.getElementById('period-nav');
+  nav.innerHTML=state.map(function(p,i){
+    var tasks=p.cats.reduce(function(a,c){return a.concat(c.tasks);},[]);
+    var done=tasks.filter(function(t){return t.done;}).length;
+    var pct=tasks.length?Math.round(done/tasks.length*100):0;
+    var ac=i===activeP?'active-'+p.color:'';
+    return '<button class="period-tab '+ac+'" onclick="switchP('+i+')">'
+      +'<span class="tab-period-name">'+p.name+'</span>'
+      +'<span class="tab-time">'+p.time+'</span>'
+      +'<span class="tab-count">'+done+' of '+tasks.length+' complete</span>'
+      +'<div class="tab-mini-bar"><div class="tab-mini-fill" style="width:'+pct+'%"></div></div>'
+      +'</button>';
   }).join('');
 }
 
-// RENDER MAIN
 function renderMain(){
-  const p=state[activeP];
-  let h='';
-  p.cats.forEach((c,ci)=>{
-    const done=c.tasks.filter(t=>t.done).length;
-    const colorIdx=ci%CAT_COLORS.length;
+  var p=state[activeP];
+  var h='';
+  p.cats.forEach(function(c,ci){
+    var done=c.tasks.filter(function(t){return t.done;}).length;
+    var colorIdx=ci%CAT_COLORS.length;
 
-    // STATION ISSUES — special rendering
     if(c.cat==='Station issues'){
-      h+=`<div class="cat-section">
-        <div class="cat-header">
-          <div class="cat-dot" style="background:${CAT_COLORS[colorIdx]}"></div>
-          <span class="cat-name">Station issues</span>
-        </div>
-        ${renderStationTracker()}
-      </div>`;
+      h+='<div class="cat-section"><div class="cat-header">'
+        +'<div class="cat-dot" style="background:'+CAT_COLORS[colorIdx]+'"></div>'
+        +'<span class="cat-name">Station issues</span></div>'
+        +renderStationTracker()+'</div>';
+      return;
+    }
+    if(c.cat==='Rate coaching'){
+      h+='<div class="cat-section"><div class="cat-header">'
+        +'<div class="cat-dot" style="background:'+CAT_COLORS[colorIdx]+'"></div>'
+        +'<span class="cat-name">Rate coaching</span></div>'
+        +renderCoachingTracker(p.id)+'</div>';
+      return;
+    }
+    if(c.cat==='STUs - behavioral'||c.cat==='STUs - break time'){
+      var skey=stuKey(p.id,c.cat);
+      var slabel=c.cat==='STUs - behavioral'?'STUs - Behavioral':'STUs - Break Time';
+      h+='<div class="cat-section"><div class="cat-header">'
+        +'<div class="cat-dot" style="background:'+CAT_COLORS[colorIdx]+'"></div>'
+        +'<span class="cat-name">'+c.cat+'</span></div>'
+        +renderStuTracker(skey,slabel)+'</div>';
       return;
     }
 
-    h+=`<div class="cat-section">
-      <div class="cat-header">
-        <div class="cat-dot" style="background:${CAT_COLORS[colorIdx]}"></div>
-        <span class="cat-name">${c.cat}</span>
-        <span class="cat-progress">${done}/${c.tasks.length}</span>
-      </div>`;
-    c.tasks.forEach((t,ti)=>{
-      const checkedClass=t.done?`checked-${p.color}`:'';
-      const doneClass=t.done?'is-done':'';
-      const expandClass=t.expanded?'is-expanded':'';
-      const statusBadge=t.status==='on-track'?'<span class="status-badge sb-on-track">On track</span>':t.status==='at-risk'?'<span class="status-badge sb-at-risk">At risk</span>':t.status==='missed'?'<span class="status-badge sb-missed">Missed</span>':t.status==='engaged'?'<span class="status-badge sb-on-track">Completed</span>':'';
-      h+=`<div class="task-card ${doneClass} ${expandClass}" id="tc-${t.id}">
-        <div class="task-row" onclick="${c.cat==='Admin Work'?`toggleDone(${activeP},${ci},${ti})`:`toggleExpand(${activeP},${ci},${ti})`}">
-          <div class="check-circle ${checkedClass}" onclick="event.stopPropagation();toggleDone(${activeP},${ci},${ti})">
-            <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
-          </div>
-          <div class="task-info">
-            <div class="task-name">${t.name}</div>
-            ${c.cat!=='Admin Work'&&t.done&&(c.cat==='Start up'?t.completedAt:(t.metric||t.status||t.completedAt))?`<div class="task-inline-meta">
-              ${c.cat==='Start up'||c.cat==='Engagements'?'':`${t.metric?`<span class="task-metric-pill">${t.metric}</span>`:''}${c.cat==='Staffing'?'':statusBadge}`}
-              ${c.cat==='Engagements'?statusBadge:''}
-              ${t.completedAt?`<span class="task-time-pill">✓ ${t.completedAt}</span>`:''}
-            </div>`:''}
-            ${c.cat==='Admin Work'&&t.completedAt?`<div class="task-inline-meta"><span class="task-time-pill">✓ ${t.completedAt}</span></div>`:''}
-          </div>
-          ${c.cat==='Admin Work'?'':`<span class="task-expand-icon ${t.expanded?'open':''}">⌄</span>`}
-        </div>
-        ${c.cat!=='Admin Work'&&t.expanded?`<div class="task-detail">
-          <div class="detail-grid">
-            ${c.cat==='Start up'?'':c.cat==='Staffing'?`
-            <div class="detail-full">
-              <div class="det-label">Planned walls</div>
-              <input class="det-input" type="text" placeholder="e.g. 4 walls planned" value="${t.metric||''}" oninput="setField(${activeP},${ci},${ti},'metric',this.value)"/>
-            </div>`:c.cat==='Engagements'?`
-            <div class="detail-full">
-              <div class="det-label">Status</div>
-              <div class="status-buttons">
-                <button class="st-btn ${t.status==='missed'?'active-missed':''}" onclick="setField(${activeP},${ci},${ti},'status','missed')">Missed</button>
-                <button class="st-btn ${t.status==='engaged'?'active-on-track':''}" onclick="setField(${activeP},${ci},${ti},'status','engaged')">Completed</button>
-              </div>
-            </div>`:`
-            <div>
-              <div class="det-label">Metric / value</div>
-              <input class="det-input" type="text" placeholder="e.g. 318 uph, 4/5 coached" value="${t.metric||''}" oninput="setField(${activeP},${ci},${ti},'metric',this.value)"/>
-            </div>
-            <div>
-              <div class="det-label">Status</div>
-              <div class="status-buttons">
-                <button class="st-btn ${t.status==='on-track'?'active-on-track':''}" onclick="setField(${activeP},${ci},${ti},'status','on-track')">On track</button>
-                <button class="st-btn ${t.status==='at-risk'?'active-at-risk':''}" onclick="setField(${activeP},${ci},${ti},'status','at-risk')">At risk</button>
-                <button class="st-btn ${t.status==='missed'?'active-missed':''}" onclick="setField(${activeP},${ci},${ti},'status','missed')">Missed</button>
-              </div>
-            </div>`}
-            ${c.cat==='Engagements'?'':`
-            <div class="detail-full">
-              <div class="det-label">Notes</div>
-              <textarea class="det-textarea" placeholder="Context, actions taken, follow-ups…" oninput="setField(${activeP},${ci},${ti},'notes',this.value)">${t.notes||''}</textarea>
-            </div>`}
-          </div>
-        </div>`:''}
-      </div>`;
+    h+='<div class="cat-section"><div class="cat-header">'
+      +'<div class="cat-dot" style="background:'+CAT_COLORS[colorIdx]+'"></div>'
+      +'<span class="cat-name">'+c.cat+'</span>'
+      +(c.cat!=='Admin Work'?'<span class="cat-progress">'+done+'/'+c.tasks.length+'</span>':'')
+      +'</div>';
+
+    c.tasks.forEach(function(t,ti){
+      var isAdminWork=c.cat==='Admin Work';
+      var isStartUp=c.cat==='Start up';
+      var isStaffing=c.cat==='Staffing';
+      var isEngagements=c.cat==='Engagements';
+      var checkedClass=t.done?'check-circle checked-'+p.color:'check-circle';
+      var doneClass=t.done?'is-done':'';
+      var expandClass=t.expanded?'is-expanded':'';
+      var statusBadge='';
+      if(t.status==='on-track')statusBadge='<span class="status-badge sb-on-track">On track</span>';
+      else if(t.status==='at-risk')statusBadge='<span class="status-badge sb-at-risk">At risk</span>';
+      else if(t.status==='missed')statusBadge='<span class="status-badge sb-missed">Missed</span>';
+      else if(t.status==='engaged')statusBadge='<span class="status-badge sb-on-track">Completed</span>';
+
+      var rowClick=isAdminWork?'toggleDone('+activeP+','+ci+','+ti+')':'toggleExpand('+activeP+','+ci+','+ti+')';
+
+      h+='<div class="task-card '+doneClass+' '+expandClass+'" id="tc-'+t.id+'">';
+      h+='<div class="task-row" onclick="'+rowClick+'">';
+      h+='<div class="'+checkedClass+'" onclick="event.stopPropagation();toggleDone('+activeP+','+ci+','+ti+')">';
+      h+='<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>';
+      h+='<div class="task-info"><div class="task-name">'+t.name+'</div>';
+
+      if(!isAdminWork && t.done){
+        var showMeta=false;
+        var metaHtml='';
+        if(!isStartUp && !isEngagements && t.metric){metaHtml+='<span class="task-metric-pill">'+t.metric+'</span>';showMeta=true;}
+        if(!isStartUp && !isStaffing && !isEngagements && t.status){metaHtml+=statusBadge;showMeta=true;}
+        if(isEngagements && t.status){metaHtml+=statusBadge;showMeta=true;}
+        if(t.completedAt){metaHtml+='<span class="task-time-pill">&#10003; '+t.completedAt+'</span>';showMeta=true;}
+        if(showMeta)h+='<div class="task-inline-meta">'+metaHtml+'</div>';
+      }
+      if(isAdminWork && t.completedAt)h+='<div class="task-inline-meta"><span class="task-time-pill">&#10003; '+t.completedAt+'</span></div>';
+
+      h+='</div>';
+      if(!isAdminWork)h+='<span class="task-expand-icon'+(t.expanded?' open':'')+'">&#8964;</span>';
+      h+='</div>';
+
+      if(!isAdminWork && t.expanded){
+        h+='<div class="task-detail"><div class="detail-grid">';
+        if(isStaffing){
+          h+='<div class="detail-full"><div class="det-label">Planned walls</div>'
+            +'<input class="det-input" type="text" placeholder="e.g. 4 walls planned" value="'+(t.metric||'')+'" oninput="setField('+activeP+','+ci+','+ti+',\'metric\',this.value)"/></div>';
+        } else if(isEngagements){
+          h+='<div class="detail-full"><div class="det-label">Status</div><div class="status-buttons">'
+            +'<button class="st-btn'+(t.status==='missed'?' active-missed':'')+'" onclick="setField('+activeP+','+ci+','+ti+',\'status\',\'missed\')">Missed</button>'
+            +'<button class="st-btn'+(t.status==='engaged'?' active-engaged':'')+'" onclick="setField('+activeP+','+ci+','+ti+',\'status\',\'engaged\')">Completed</button>'
+            +'</div></div>';
+        } else if(!isStartUp){
+          h+='<div><div class="det-label">Metric / value</div>'
+            +'<input class="det-input" type="text" placeholder="e.g. 318 uph" value="'+(t.metric||'')+'" oninput="setField('+activeP+','+ci+','+ti+',\'metric\',this.value)"/></div>';
+          h+='<div><div class="det-label">Status</div><div class="status-buttons">'
+            +'<button class="st-btn'+(t.status==='on-track'?' active-on-track':'')+'" onclick="setField('+activeP+','+ci+','+ti+',\'status\',\'on-track\')">On track</button>'
+            +'<button class="st-btn'+(t.status==='at-risk'?' active-at-risk':'')+'" onclick="setField('+activeP+','+ci+','+ti+',\'status\',\'at-risk\')">At risk</button>'
+            +'<button class="st-btn'+(t.status==='missed'?' active-missed':'')+'" onclick="setField('+activeP+','+ci+','+ti+',\'status\',\'missed\')">Missed</button>'
+            +'</div></div>';
+        }
+        if(!isStaffing && !isEngagements){
+          h+='<div class="detail-full"><div class="det-label">Notes</div>'
+            +'<textarea class="det-textarea" placeholder="Context, actions taken, follow-ups..." oninput="setField('+activeP+','+ci+','+ti+',\'notes\',this.value)">'+(t.notes||'')+'</textarea></div>';
+        }
+        h+='</div></div>';
+      }
+      h+='</div>';
     });
-    h+=`</div>`;
+    h+='</div>';
   });
   document.getElementById('main-content').innerHTML=h;
   updateStats();
 }
 
 function updateStats(){
-  const all=allTasks();
-  const done=all.filter(t=>t.done).length;
-  const total=all.length;
-  const pct=total?Math.round(done/total*100):0;
+  var all=allTasks();
+  var done=all.filter(function(t){return t.done;}).length;
+  var total=all.length;
+  var pct=total?Math.round(done/total*100):0;
   document.getElementById('stat-total').textContent=total;
   document.getElementById('stat-done').textContent=done;
   document.getElementById('stat-open').textContent=total-done;
@@ -547,12 +622,11 @@ function toggleExpand(pi,ci,ti){
 }
 
 function toggleDone(pi,ci,ti){
-  const t=state[pi].cats[ci].tasks[ti];
-  const cat=state[pi].cats[ci].cat;
+  var t=state[pi].cats[ci].tasks[ti];
+  var cat=state[pi].cats[ci].cat;
   t.done=!t.done;
   if(t.done){
-    const now=new Date();
-    t.completedAt=now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    t.completedAt=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
     t.expanded=false;
   } else {
     t.completedAt='';
@@ -564,184 +638,216 @@ function toggleDone(pi,ci,ti){
 function setField(pi,ci,ti,f,v){state[pi].cats[ci].tasks[ti][f]=v;save();}
 
 function confirmReset(){
-  if(confirm('Start a new shift? This will clear all completions, notes, metrics, and station issues.')){
-    state=initState();
-    save();
-    stationIssues=[];
-    saveStations();
-    activeP=0;
-    renderTabs();
-    renderMain();
+  if(confirm('Start a new shift? This will clear all completions, notes, metrics, station issues, and coaching logs.')){
+    state=initState();save();
+    stationIssues=[];saveStations();
+    coachingLogs={p2:[],p3:[]};saveCoaching();
+    stuLogs={p2b:[],p2br:[],p3b:[],p3br:[]};saveStu();
+    activeP=0;renderTabs();renderMain();
   }
 }
 
-// REPORT
 function buildReportText(){
-  const name=document.getElementById('am-name').value||'Area Manager';
-  const d=new Date();
-  const ds=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const ts=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  const all=allTasks();
-  const done=all.filter(t=>t.done).length;
-  let txt=`╔══════════════════════════════════════════════════════╗\n`;
-  txt+=`  SHIFT HANDOFF REPORT\n`;
-  txt+=`  AM: ${name}\n`;
-  txt+=`  Date: ${ds}\n`;
-  txt+=`  Generated: ${ts}\n`;
-  txt+=`  Overall: ${done}/${all.length} tasks (${all.length?Math.round(done/all.length*100):0}% complete)\n`;
-  txt+=`╚══════════════════════════════════════════════════════╝\n\n`;
-  state.forEach(p=>{
-    const ptasks=p.cats.flatMap(c=>c.tasks);
-    const pdone=ptasks.filter(t=>t.done).length;
-    txt+=`▌ ${p.name} (${p.time}) — ${pdone}/${ptasks.length} complete\n`;
-    txt+=`${'─'.repeat(54)}\n`;
-    p.cats.forEach(c=>{
-      txt+=`  [${c.cat}]\n`;
-      c.tasks.forEach(t=>{
-        const chk=t.done?'✓':' ';
-        const st=t.status?` · ${t.status==='engaged'?'COMPLETED':t.status.toUpperCase()}`:'';
-        const ct=t.completedAt?` (${t.completedAt})`:'';
-        txt+=`    [${chk}] ${t.name}${st}${ct}\n`;
-        if(t.metric) txt+=`         Metric: ${t.metric}\n`;
-        if(t.notes)  txt+=`         Notes:  ${t.notes}\n`;
+  var name=document.getElementById('am-name').value||'Area Manager';
+  var d=new Date();
+  var ds=d.toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  var ts=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  var all=allTasks();
+  var done=all.filter(function(t){return t.done;}).length;
+  var line='------------------------------------------------------';
+  var txt='SHIFT HANDOFF REPORT\n';
+  txt+='AM: '+name+'\n';
+  txt+='Date: '+ds+' | Generated: '+ts+'\n';
+  txt+='Overall: '+done+'/'+all.length+' tasks ('+( all.length?Math.round(done/all.length*100):0)+'% complete)\n';
+  txt+=line+'\n\n';
+  state.forEach(function(p){
+    var ptasks=p.cats.reduce(function(a,c){return a.concat(c.tasks);},[]);
+    var pdone=ptasks.filter(function(t){return t.done;}).length;
+    txt+='| '+p.name+' ('+p.time+') - '+pdone+'/'+ptasks.length+' complete\n';
+    txt+=line+'\n';
+    p.cats.forEach(function(c){
+      if(c.cat==='Rate coaching'){
+        var entries=coachingLogs[p.id]||[];
+        var cdone=entries.filter(function(e){return e.done;}).length;
+        txt+='  [Rate coaching] '+cdone+'/5\n';
+        entries.forEach(function(e,i){
+          txt+='    ['+(e.done?'v':' ')+'] Associate '+(i+1)+': '+(e.login||'-')+'\n';
+          if(e.rateBefore)txt+='         Rate before: '+e.rateBefore+'\n';
+          if(e.cycletime)txt+='         Cycle time:  '+e.cycletime+'s\n';
+          if(e.rateAfter)txt+='         Rate after:  '+e.rateAfter+'\n';
+          if(e.notes)txt+='         Notes:       '+e.notes+'\n';
+        });
+        return;
+      }
+      if(c.cat==='Station issues')return;
+      if(c.cat==='STUs - behavioral'||c.cat==='STUs - break time'){
+        var skey=stuKey(p.id,c.cat);
+        var stuentries=stuLogs[skey]||[];
+        var studone=stuentries.filter(function(e){return e.done;}).length;
+        txt+='  ['+c.cat+'] '+studone+'/'+stuentries.length+'\n';
+        stuentries.forEach(function(e,i){
+          txt+='    ['+(e.done?'v':' ')+'] STU '+(i+1)+': '+(e.login||'-')+'\n';
+          if(e.notes)txt+='         Notes: '+e.notes+'\n';
+        });
+        return;
+      }
+      txt+='  ['+c.cat+']\n';
+      c.tasks.forEach(function(t){
+        var st=t.status?' - '+(t.status==='engaged'?'COMPLETED':t.status.toUpperCase()):'';
+        var ct=t.completedAt?' ('+t.completedAt+')':'';
+        txt+='    ['+(t.done?'v':' ')+'] '+t.name+st+ct+'\n';
+        if(t.metric)txt+='         Metric: '+t.metric+'\n';
+        if(t.notes)txt+='         Notes:  '+t.notes+'\n';
       });
     });
     txt+='\n';
   });
   if(stationIssues.length){
-    txt+=`▌ STATION ISSUES (${stationIssues.length} logged)\n`;
-    txt+=`${'─'.repeat(54)}\n`;
-    stationIssues.forEach(s=>{
-      const status=s.resolved?`✓ Resolved ${s.resolvedAt||''}`:'⚠ Open';
-      txt+=`  [${s.resolved?'✓':' '}] ${s.name||'Unnamed station'} — ${status}\n`;
-      if(s.ticketUrl) txt+=`       Ticket: ${s.ticketUrl}\n`;
+    txt+='STATION ISSUES ('+stationIssues.length+' logged)\n'+line+'\n';
+    stationIssues.forEach(function(s){
+      txt+='  ['+(s.resolved?'v':' ')+'] '+(s.name||'Unnamed')+' - '+(s.resolved?'Resolved '+(s.resolvedAt||''):'Open')+'\n';
+      if(s.ticketUrl)txt+='       Ticket: '+s.ticketUrl+'\n';
     });
     txt+='\n';
   }
-  const open=all.filter(t=>!t.done);
+  var open=all.filter(function(t){return !t.done;});
   if(open.length){
-    txt+=`⚠ OPEN / INCOMPLETE (${open.length} items)\n`;
-    txt+=`${'─'.repeat(54)}\n`;
-    open.forEach(t=>txt+=`  • ${t.name}\n`);
+    txt+='OPEN / INCOMPLETE ('+open.length+' items)\n'+line+'\n';
+    open.forEach(function(t){txt+='  * '+t.name+'\n';});
     txt+='\n';
   }
-  txt+=`${'─'.repeat(54)}\n`;
-  txt+=`Pass to incoming AM. End of report.\n`;
+  txt+=line+'\nPass to incoming AM. End of report.\n';
   return txt;
 }
 
 function buildReportHTML(){
-  const all=allTasks();
-  const open=all.filter(t=>!t.done);
-  let h='';
-  state.forEach(p=>{
-    const ptasks=p.cats.flatMap(c=>c.tasks);
-    const pdone=ptasks.filter(t=>t.done).length;
-    const colors={p1:'#3B6DD4',p2:'#7B4FBF',p3:'#1A9E6E'};
-    h+=`<div class="report-period">
-      <div class="rp-header">
-        <span class="rp-name" style="color:${colors[p.color]}">${p.name} · ${p.time}</span>
-        <span class="rp-count">${pdone}/${ptasks.length} complete</span>
-      </div>`;
-    p.cats.forEach(c=>{
-      c.tasks.forEach(t=>{
-        const badge=t.status==='on-track'?'<span class="status-badge sb-on-track">On track</span>':t.status==='at-risk'?'<span class="status-badge sb-at-risk">At risk</span>':t.status==='missed'?'<span class="status-badge sb-missed">Missed</span>':t.status==='engaged'?'<span class="status-badge sb-on-track">Completed</span>':t.done?'<span class="status-badge" style="background:#EEF0F3;color:#5A6270">Done</span>':'<span class="status-badge" style="background:#EEF0F3;color:#9BA3B0">Pending</span>';
-        h+=`<div class="report-item">
-          <div class="ri-left">
-            <div class="ri-task ${t.done?'crossed':''}">${t.name}</div>
-            <div class="ri-cat">${c.cat}${t.metric?' · <strong>'+t.metric+'</strong>':''}</div>
-            ${t.notes?`<div class="ri-detail">${t.notes}</div>`:''}
-            ${t.completedAt?`<div class="ri-time">Completed at ${t.completedAt}</div>`:''}
-          </div>
-          ${badge}
-        </div>`;
+  var all=allTasks();
+  var open=all.filter(function(t){return !t.done;});
+  var h='';
+  state.forEach(function(p){
+    var ptasks=p.cats.reduce(function(a,c){return a.concat(c.tasks);},[]);
+    var pdone=ptasks.filter(function(t){return t.done;}).length;
+    var colors={p1:'#3B6DD4',p2:'#7B4FBF',p3:'#1A9E6E'};
+    h+='<div class="report-period"><div class="rp-header">'
+      +'<span class="rp-name" style="color:'+colors[p.color]+'">'+p.name+' - '+p.time+'</span>'
+      +'<span class="rp-count">'+pdone+'/'+ptasks.length+' complete</span></div>';
+    p.cats.forEach(function(c){
+      if(c.cat==='Rate coaching'){
+        var entries=coachingLogs[p.id]||[];
+        if(!entries.length)return;
+        var cdone=entries.filter(function(e){return e.done;}).length;
+        h+='<div class="ri-cat" style="font-weight:600;padding:4px 0 2px;">Rate coaching - '+cdone+'/5</div>';
+        entries.forEach(function(e,i){
+          var badge=e.done?'<span class="status-badge sb-on-track">Done</span>':'<span class="status-badge" style="background:var(--gray-100);color:var(--gray-400)">Pending</span>';
+          h+='<div class="report-item"><div class="ri-left">'
+            +'<div class="ri-task'+(e.done?' crossed':'')+'">Associate '+(i+1)+': '+(e.login||'-')+'</div>'
+            +'<div class="ri-detail">'+(e.rateBefore?'Before: '+e.rateBefore:'')+(e.cycletime?' - Cycle: '+e.cycletime+'s':'')+(e.rateAfter?' - After: '+e.rateAfter:'')+'</div>'
+            +(e.notes?'<div class="ri-detail">'+e.notes+'</div>':'')
+            +'</div>'+badge+'</div>';
+        });
+        return;
+      }
+      if(c.cat==='Station issues')return;
+      if(c.cat==='STUs - behavioral'||c.cat==='STUs - break time'){
+        var skey2=stuKey(p.id,c.cat);
+        var stuentries2=stuLogs[skey2]||[];
+        if(!stuentries2.length)return;
+        var studone2=stuentries2.filter(function(e){return e.done;}).length;
+        h+='<div class="ri-cat" style="font-weight:600;padding:4px 0 2px;">'+c.cat+' - '+studone2+'/'+stuentries2.length+'</div>';
+        stuentries2.forEach(function(e,i){
+          var badge2=e.done?'<span class="status-badge sb-on-track">Done</span>':'<span class="status-badge" style="background:var(--gray-100);color:var(--gray-400)">Pending</span>';
+          h+='<div class="report-item"><div class="ri-left">'
+            +'<div class="ri-task'+(e.done?' crossed':'')+'">STU '+(i+1)+': '+(e.login||'-')+'</div>'
+            +(e.notes?'<div class="ri-detail">'+e.notes+'</div>':'')
+            +'</div>'+badge2+'</div>';
+        });
+        return;
+      }
+      c.tasks.forEach(function(t){
+        var badge='<span class="status-badge" style="background:var(--gray-100);color:var(--gray-400)">Pending</span>';
+        if(t.status==='on-track')badge='<span class="status-badge sb-on-track">On track</span>';
+        else if(t.status==='at-risk')badge='<span class="status-badge sb-at-risk">At risk</span>';
+        else if(t.status==='missed')badge='<span class="status-badge sb-missed">Missed</span>';
+        else if(t.status==='engaged')badge='<span class="status-badge sb-on-track">Completed</span>';
+        else if(t.done)badge='<span class="status-badge" style="background:var(--gray-100);color:var(--gray-600)">Done</span>';
+        h+='<div class="report-item"><div class="ri-left">'
+          +'<div class="ri-task'+(t.done?' crossed':'')+'">'+t.name+'</div>'
+          +'<div class="ri-cat">'+c.cat+(t.metric?' - '+t.metric:'')+'</div>'
+          +(t.notes?'<div class="ri-detail">'+t.notes+'</div>':'')
+          +(t.completedAt?'<div class="ri-time">Completed at '+t.completedAt+'</div>':'')
+          +'</div>'+badge+'</div>';
       });
     });
-    h+=`</div>`;
+    h+='</div>';
   });
   if(stationIssues.length){
-    const openSt=stationIssues.filter(s=>!s.resolved).length;
-    h+=`<div class="report-period">
-      <div class="rp-header">
-        <span class="rp-name" style="color:var(--amber)">Station issues</span>
-        <span class="rp-count">${stationIssues.length-openSt}/${stationIssues.length} resolved</span>
-      </div>`;
-    stationIssues.forEach(s=>{
-      const badge=s.resolved?'<span class="status-badge sb-on-track">Resolved</span>':'<span class="status-badge sb-at-risk">Open</span>';
-      h+=`<div class="report-item">
-        <div class="ri-left">
-          <div class="ri-task ${s.resolved?'crossed':''}">${s.name||'Unnamed station'}</div>
-          ${s.ticketUrl?`<div class="ri-cat">Ticket: <a href="${s.ticketUrl}" target="_blank" style="color:var(--p1)">${s.ticketUrl}</a></div>`:'<div class="ri-cat">No ticket logged</div>'}
-          ${s.resolvedAt?`<div class="ri-time">Resolved at ${s.resolvedAt}</div>`:''}
-        </div>${badge}
-      </div>`;
+    var openSt=stationIssues.filter(function(s){return !s.resolved;}).length;
+    h+='<div class="report-period"><div class="rp-header">'
+      +'<span class="rp-name" style="color:var(--amber)">Station issues</span>'
+      +'<span class="rp-count">'+(stationIssues.length-openSt)+'/'+stationIssues.length+' resolved</span></div>';
+    stationIssues.forEach(function(s){
+      var badge=s.resolved?'<span class="status-badge sb-on-track">Resolved</span>':'<span class="status-badge sb-at-risk">Open</span>';
+      h+='<div class="report-item"><div class="ri-left">'
+        +'<div class="ri-task'+(s.resolved?' crossed':'')+'">'+( s.name||'Unnamed station')+'</div>'
+        +(s.ticketUrl?'<div class="ri-cat">Ticket: <a href="'+s.ticketUrl+'" target="_blank" style="color:var(--p1)">'+s.ticketUrl+'</a></div>':'<div class="ri-cat">No ticket logged</div>')
+        +(s.resolvedAt?'<div class="ri-time">Resolved at '+s.resolvedAt+'</div>':'')
+        +'</div>'+badge+'</div>';
     });
-    h+=`</div>`;
+    h+='</div>';
   }
   if(open.length){
-    h+=`<div class="open-items-section"><div class="oi-title">⚠ Open / incomplete — ${open.length} item${open.length>1?'s':''}</div>`;
-    open.forEach(t=>h+=`<div class="oi-item">• ${t.name}</div>`);
-    h+=`</div>`;
+    h+='<div class="open-items-section"><div class="oi-title">Open / incomplete - '+open.length+' item'+(open.length>1?'s':'')+'</div>';
+    open.forEach(function(t){h+='<div class="oi-item">- '+t.name+'</div>';});
+    h+='</div>';
   }
   return h;
 }
 
 function openReport(){
-  const name=document.getElementById('am-name').value||'Area Manager';
-  const d=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  document.getElementById('modal-sub').textContent=`${name} · ${d}`;
+  var name=document.getElementById('am-name').value||'Area Manager';
+  var d=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('modal-sub').textContent=name+' - '+d;
   document.getElementById('report-visual').innerHTML=buildReportHTML();
   document.getElementById('report-text').value=buildReportText();
   document.getElementById('modal').classList.add('open');
 }
-
 function closeReport(){document.getElementById('modal').classList.remove('open');}
-
 function copyReport(){
-  const ta=document.getElementById('report-text');
-  ta.select();
-  try{document.execCommand('copy');}catch(e){}
-  const btn=document.getElementById('copy-btn');
+  var ta=document.getElementById('report-text');
+  ta.select();try{document.execCommand('copy');}catch(e){}
+  var btn=document.getElementById('copy-btn');
   btn.textContent='Copied!';
-  setTimeout(()=>btn.textContent='Copy to clipboard',2000);
+  setTimeout(function(){btn.textContent='Copy to clipboard';},2000);
 }
-
 function downloadReport(){
-  const name=document.getElementById('am-name').value||'AM';
-  const d=new Date();
-  const fn=`ShiftReport_${name.replace(/\s+/g,'_')}_${(d.getMonth()+1)}-${d.getDate()}-${d.getFullYear()}.txt`;
-  const b=new Blob([buildReportText()],{type:'text/plain'});
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(b);
-  a.download=fn;
-  a.click();
+  var name=document.getElementById('am-name').value||'AM';
+  var d=new Date();
+  var fn='ShiftReport_'+name.replace(/\s+/g,'_')+'_'+(d.getMonth()+1)+'-'+d.getDate()+'-'+d.getFullYear()+'.txt';
+  var b=new Blob([buildReportText()],{type:'text/plain'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(b);a.download=fn;a.click();
 }
 
-// THEME
 function applyTheme(t){
-  if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');}
-  else{document.documentElement.removeAttribute('data-theme');}
+  if(t==='dark')document.documentElement.setAttribute('data-theme','dark');
+  else document.documentElement.removeAttribute('data-theme');
 }
 function toggleTheme(){
-  const isDark=document.documentElement.getAttribute('data-theme')==='dark';
-  const next=isDark?'light':'dark';
+  var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  var next=isDark?'light':'dark';
   applyTheme(next);
   try{localStorage.setItem('am_theme',next);}catch(e){}
 }
-(function initTheme(){
-  let saved;
-  try{saved=localStorage.getItem('am_theme');}catch(e){}
-  if(!saved){
-    saved=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
-  }
+(function(){
+  var saved;try{saved=localStorage.getItem('am_theme');}catch(e){}
+  if(!saved)saved=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';
   applyTheme(saved);
 })();
 
-// INIT
 document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-const savedName=localStorage.getItem('am_name')||'';
+var savedName=localStorage.getItem('am_name')||'';
 document.getElementById('am-name').value=savedName;
-document.getElementById('am-name').addEventListener('input',e=>localStorage.setItem('am_name',e.target.value));
+document.getElementById('am-name').addEventListener('input',function(e){localStorage.setItem('am_name',e.target.value);});
 renderTabs();
 renderMain();
 </script>
