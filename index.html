@@ -261,19 +261,14 @@ var PERIODS = [
     {cat:'STUs - behavioral',tasks:[]},
     {cat:'STUs - break time',tasks:[]},
     {cat:'Floor presence',tasks:[{id:'p2-4',name:'Walk through the walls - AM presence'}]},
-    {cat:'Data & compliance',tasks:[{id:'p2-5',name:'Deep dive data'},{id:'p2-6',name:'Check list'},{id:'p2-7',name:'Sync board P2 data'}]}
+    {cat:'Data & compliance',tasks:[{id:'p2-6',name:'Check list'},{id:'p2-7',name:'Sync board P2 data'}]}
   ]},
   {id:'p3',name:'P3',time:'02:30 - 05:00',color:'p3',cats:[
     {cat:'Rate coaching',tasks:[]},
     {cat:'STUs - behavioral',tasks:[]},
     {cat:'STUs - break time',tasks:[]},
-    {cat:'Data & compliance',tasks:[{id:'p3-4',name:'Deep dive data'},{id:'p3-5',name:'Check list'},{id:'p3-6',name:'Sync board P3 data'}]},
-    {cat:'Handoff',tasks:[
-      {id:'p3-7',name:'Hand off walls in standard'},
-      {id:'p3-8',name:'Hand off notes for next shift'},
-      {id:'p3-9',name:'Hand off chat filled'},
-      {id:'p3-10',name:'Clean area'}
-    ]}
+    {cat:'Data & compliance',tasks:[{id:'p3-5',name:'Check list'},{id:'p3-6',name:'Sync board P3 data'}]},
+    {cat:'Handoff',tasks:[]}
   ]}
 ];
 
@@ -297,6 +292,10 @@ function saveCoaching(){try{localStorage.setItem('am_coaching_v1',JSON.stringify
 
 var stuLogs = (function(){try{var s=localStorage.getItem('am_stu_v1');return s?JSON.parse(s):{p2b:[],p2br:[],p3b:[],p3br:[]};}catch(e){return {p2b:[],p2br:[],p3b:[],p3br:[]};}}());
 function saveStu(){try{localStorage.setItem('am_stu_v1',JSON.stringify(stuLogs));}catch(e){}}
+
+var handoffData = (function(){try{var s=localStorage.getItem('am_handoff_v1');return s?JSON.parse(s):{pallets:'',boxSuites:'',slamCarts:'',trayCount:'',wallHO:''};}catch(e){return {pallets:'',boxSuites:'',slamCarts:'',trayCount:'',wallHO:''};}}());
+function saveHandoff(){try{localStorage.setItem('am_handoff_v1',JSON.stringify(handoffData));}catch(e){}}
+function setHandoffField(field,val){handoffData[field]=val;saveHandoff();}
 
 function stuKey(pid,cat){
   if(pid==='p2'&&cat==='STUs - behavioral')return 'p2b';
@@ -382,17 +381,56 @@ function renderStuTracker(key,label){
       h+='<div class="'+rc+'" onclick="toggleStuDone(\''+key+'\',\''+e.id+'\')">';
       h+='<svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg></div>';
       h+='<span class="entry-label">STU '+(idx+1)+'</span>';
+      h+='<input class="f-input" style="flex:1;" type="text" placeholder="Associate login" value="'+(e.login||'')+'" oninput="setStuField(\''+key+'\',\''+e.id+'\',\'login\',this.value)"'+(e.done?' disabled':'')+'/>';
       h+='<button class="remove-btn" onclick="removeStu(\''+key+'\',\''+e.id+'\')">&#10005;</button>';
       h+='</div>';
-      h+='<div style="display:grid;grid-template-columns:1fr;gap:8px;padding-left:28px;">';
-      h+='<div><div class="f-label">Associate login</div>';
-      h+='<input class="f-input" type="text" placeholder="e.g. amzn1.user.xyz" value="'+(e.login||'')+'" oninput="setStuField(\''+key+'\',\''+e.id+'\',\'login\',this.value)"'+(e.done?' disabled':'')+'/></div>';
-      h+='<div><div class="f-label">Notes</div>';
+      h+='<div style="padding-left:28px;"><div class="f-label">Notes</div>';
       h+='<textarea class="f-ta" placeholder="Behavior observed, action taken..." oninput="setStuField(\''+key+'\',\''+e.id+'\',\'notes\',this.value)"'+(e.done?' disabled':'')+'>'+( e.notes||'')+'</textarea></div>';
-      h+='</div></div>';
     });
   }
   h+='</div>';
+  return h;
+}
+
+function renderHandoff(){
+  var openStations=stationIssues.filter(function(s){return !s.resolved;});
+  var h='<div class="tracker-box">';
+  h+='<div class="tracker-head"><span class="tracker-title">End of shift handoff</span></div>';
+  h+='<div style="padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">';
+
+  h+='<div><div class="f-label">Pallets at tote stacker</div>';
+  h+='<input class="f-input" type="number" min="0" placeholder="0" value="'+(handoffData.pallets||'')+'" oninput="setHandoffField(\'pallets\',this.value)"/></div>';
+
+  h+='<div><div class="f-label">Carts at slam kickout</div>';
+  h+='<input class="f-input" type="number" min="0" placeholder="0" value="'+(handoffData.slamCarts||'')+'" oninput="setHandoffField(\'slamCarts\',this.value)"/></div>';
+
+  h+='<div><div class="f-label">Tray count at EOS</div>';
+  h+='<input class="f-input" type="number" min="0" placeholder="0" value="'+(handoffData.trayCount||'')+'" oninput="setHandoffField(\'trayCount\',this.value)"/></div>';
+
+  h+='<div><div class="f-label">Wall HO</div>';
+  h+='<input class="f-input" type="number" min="0" placeholder="0" value="'+(handoffData.wallHO||'')+'" oninput="setHandoffField(\'wallHO\',this.value)"/></div>';
+
+  h+='<div style="grid-column:1/-1;"><div class="f-label">Box suites filled?</div>';
+  h+='<div style="display:flex;gap:8px;margin-top:2px;">';
+  h+='<button class="st-btn'+(handoffData.boxSuites==='yes'?' active-on-track':'')+'" onclick="setHandoffField(\'boxSuites\',\'yes\');renderMain()">Yes</button>';
+  h+='<button class="st-btn'+(handoffData.boxSuites==='no'?' active-missed':'')+'" onclick="setHandoffField(\'boxSuites\',\'no\');renderMain()">No</button>';
+  h+='</div></div>';
+
+  h+='<div style="grid-column:1/-1;"><div class="f-label">Open station issues</div>';
+  if(openStations.length===0){
+    h+='<div style="font-size:12px;color:var(--green);padding:6px 0;">&#10003; No open station issues</div>';
+  } else {
+    h+='<div style="margin-top:4px;display:flex;flex-direction:column;gap:4px;">';
+    openStations.forEach(function(s){
+      h+='<div style="font-size:12px;padding:5px 10px;border-radius:var(--radius-sm);background:var(--red-bg);color:var(--red);display:flex;align-items:center;justify-content:space-between;">';
+      h+='<span>'+(s.name||'Unnamed station')+'</span>';
+      h+=(s.ticketUrl?'<a href="'+s.ticketUrl+'" target="_blank" class="open-link" style="font-size:11px;">Ticket &#8599;</a>':'<span style="font-size:11px;opacity:.6;">No ticket</span>');
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+  h+='</div>';
+  h+='</div></div>';
   return h;
 }
 
@@ -525,6 +563,13 @@ function renderMain(){
         +renderStuTracker(skey,slabel)+'</div>';
       return;
     }
+    if(c.cat==='Handoff'){
+      h+='<div class="cat-section"><div class="cat-header">'
+        +'<div class="cat-dot" style="background:'+CAT_COLORS[colorIdx]+'"></div>'
+        +'<span class="cat-name">Handoff</span></div>'
+        +renderHandoff()+'</div>';
+      return;
+    }
 
     h+='<div class="cat-section"><div class="cat-header">'
       +'<div class="cat-dot" style="background:'+CAT_COLORS[colorIdx]+'"></div>'
@@ -533,7 +578,7 @@ function renderMain(){
       +'</div>';
 
     c.tasks.forEach(function(t,ti){
-      var isAdminWork=c.cat==='Admin Work';
+      var isAdminWork=c.cat==='Admin Work'||c.cat==='Floor presence'||c.cat==='Data & compliance';
       var isStartUp=c.cat==='Start up';
       var isStaffing=c.cat==='Staffing';
       var isEngagements=c.cat==='Engagements';
@@ -630,7 +675,7 @@ function toggleDone(pi,ci,ti){
     t.expanded=false;
   } else {
     t.completedAt='';
-    t.expanded=cat!=='Admin Work';
+    t.expanded=cat!=='Admin Work'&&cat!=='Floor presence'&&cat!=='Data & compliance';
   }
   save();renderTabs();renderMain();
 }
@@ -643,6 +688,7 @@ function confirmReset(){
     stationIssues=[];saveStations();
     coachingLogs={p2:[],p3:[]};saveCoaching();
     stuLogs={p2b:[],p2br:[],p3b:[],p3br:[]};saveStu();
+    handoffData={pallets:'',boxSuites:'',slamCarts:'',trayCount:'',wallHO:''};saveHandoff();
     activeP=0;renderTabs();renderMain();
   }
 }
@@ -716,6 +762,15 @@ function buildReportText(){
     open.forEach(function(t){txt+='  * '+t.name+'\n';});
     txt+='\n';
   }
+  txt+=line+'\nHANDOFF SUMMARY\n'+line+'\n';
+  txt+='Pallets at tote stacker: '+(handoffData.pallets||'-')+'\n';
+  txt+='Carts at slam kickout:   '+(handoffData.slamCarts||'-')+'\n';
+  txt+='Tray count at EOS:       '+(handoffData.trayCount||'-')+'\n';
+  txt+='Wall HO:                 '+(handoffData.wallHO||'-')+'\n';
+  txt+='Box suites filled:       '+(handoffData.boxSuites?handoffData.boxSuites.toUpperCase():'-')+'\n';
+  var openSt2=stationIssues.filter(function(s){return !s.resolved;});
+  txt+='Open station issues:     '+(openSt2.length===0?'None':openSt2.length+' open')+'\n';
+  if(openSt2.length){openSt2.forEach(function(s){txt+='  - '+(s.name||'Unnamed')+(s.ticketUrl?' ('+s.ticketUrl+')':'')+'\n';});}
   txt+=line+'\nPass to incoming AM. End of report.\n';
   return txt;
 }
@@ -795,6 +850,15 @@ function buildReportHTML(){
     });
     h+='</div>';
   }
+  var openSt3=stationIssues.filter(function(s){return !s.resolved;});
+  h+='<div class="report-period"><div class="rp-header"><span class="rp-name" style="color:var(--p3)">Handoff summary</span></div>';
+  h+='<div class="report-item"><div class="ri-left"><div class="ri-task">Pallets at tote stacker</div></div><span class="status-badge" style="background:var(--gray-100);color:var(--gray-800)">'+(handoffData.pallets||'-')+'</span></div>';
+  h+='<div class="report-item"><div class="ri-left"><div class="ri-task">Carts at slam kickout</div></div><span class="status-badge" style="background:var(--gray-100);color:var(--gray-800)">'+(handoffData.slamCarts||'-')+'</span></div>';
+  h+='<div class="report-item"><div class="ri-left"><div class="ri-task">Tray count at EOS</div></div><span class="status-badge" style="background:var(--gray-100);color:var(--gray-800)">'+(handoffData.trayCount||'-')+'</span></div>';
+  h+='<div class="report-item"><div class="ri-left"><div class="ri-task">Wall HO</div></div><span class="status-badge" style="background:var(--gray-100);color:var(--gray-800)">'+(handoffData.wallHO||'-')+'</span></div>';
+  h+='<div class="report-item"><div class="ri-left"><div class="ri-task">Box suites filled</div></div>'+(handoffData.boxSuites==='yes'?'<span class="status-badge sb-on-track">Yes</span>':handoffData.boxSuites==='no'?'<span class="status-badge sb-missed">No</span>':'<span class="status-badge" style="background:var(--gray-100);color:var(--gray-400)">-</span>')+'</div>';
+  h+='<div class="report-item"><div class="ri-left"><div class="ri-task">Open station issues</div>'+(openSt3.length?openSt3.map(function(s){return '<div class="ri-detail">'+(s.name||'Unnamed')+'</div>';}).join(''):'')+'</div>'+(openSt3.length===0?'<span class="status-badge sb-on-track">None</span>':'<span class="status-badge sb-missed">'+openSt3.length+' open</span>')+'</div>';
+  h+='</div>';
   if(open.length){
     h+='<div class="open-items-section"><div class="oi-title">Open / incomplete - '+open.length+' item'+(open.length>1?'s':'')+'</div>';
     open.forEach(function(t){h+='<div class="oi-item">- '+t.name+'</div>';});
