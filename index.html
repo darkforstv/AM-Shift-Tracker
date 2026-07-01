@@ -235,8 +235,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <button class="modal-close" onclick="closeReport()">&#10005;</button>
     </div>
     <div class="modal-body">
-      <div id="report-visual"></div>
-      <textarea class="report-textarea" id="report-text" readonly></textarea>
+      <textarea class="report-textarea" id="report-text" style="min-height:340px;" readonly></textarea>
       <button class="copy-btn" id="copy-btn" onclick="copyReport()">Copy to clipboard</button>
     </div>
   </div>
@@ -261,13 +260,13 @@ var PERIODS = [
     {cat:'STUs - behavioral',tasks:[]},
     {cat:'STUs - break time',tasks:[]},
     {cat:'Floor presence',tasks:[{id:'p2-4',name:'Walk through the walls - AM presence'}]},
-    {cat:'Data & compliance',tasks:[{id:'p2-6',name:'Check list'},{id:'p2-7',name:'Sync board P2 data'}]}
+    {cat:'Data & compliance',tasks:[{id:'p2-6',name:'Check List - P2'},{id:'p2-7',name:'Sync board P2 data'}]}
   ]},
   {id:'p3',name:'P3',time:'02:30 - 05:00',color:'p3',cats:[
     {cat:'Rate coaching',tasks:[]},
     {cat:'STUs - behavioral',tasks:[]},
     {cat:'STUs - break time',tasks:[]},
-    {cat:'Data & compliance',tasks:[{id:'p3-5',name:'Check list'},{id:'p3-6',name:'Sync board P3 data'}]},
+    {cat:'Data & compliance',tasks:[{id:'p3-5',name:'Check List - P3'},{id:'p3-6',name:'Sync board P3 data'}]},
     {cat:'Handoff',tasks:[]}
   ]}
 ];
@@ -871,7 +870,6 @@ function openReport(){
   var name=document.getElementById('am-name').value||'Area Manager';
   var d=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
   document.getElementById('modal-sub').textContent=name+' - '+d;
-  document.getElementById('report-visual').innerHTML=buildReportHTML();
   document.getElementById('report-text').value=buildReportText();
   document.getElementById('modal').classList.add('open');
 }
