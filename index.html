@@ -296,7 +296,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </header>
 
-<div class="day-tabs-wrap" id="day-tabs"></div>
+<div class="day-tabs-wrap" id="day-tabs" style="justify-content:space-between;"></div>
 <div class="stats-bar" id="stats-bar">
   <div class="stat-item"><div class="stat-val" id="stat-total">0</div><div class="stat-lbl">Total tasks</div></div>
   <div class="stat-item"><div class="stat-val" id="stat-done">0</div><div class="stat-lbl">Completed</div></div>
@@ -647,11 +647,11 @@ function renderDayTabs(){
     h+='<span class="day-tab-prog">'+done+'/'+tasks.length+' ('+pct+'%)</span>';
     h+='</div>';
   });
-  h+='<div class="day-tab'+(showResources?' active':'')+'" onclick="switchToResources()" style="min-width:100px;">'
+  var resTab='<div class="day-tab'+(showResources?' active':'')+'" onclick="switchToResources()" style="min-width:100px;">'
     +'<span class="day-tab-name">&#128196; Resources</span>'
     +'<span class="day-tab-date">Links & Terms</span>'
     +'</div>';
-  document.getElementById('day-tabs').innerHTML=h;
+  document.getElementById('day-tabs').innerHTML='<div style="display:flex;gap:8px;">'+h+'</div>'+resTab;
 }
 
 function renderPeriodTabs(){
