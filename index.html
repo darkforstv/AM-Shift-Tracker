@@ -1170,6 +1170,10 @@ function saveStuQuick(){
   renderMain();renderWeekSummary();
 }
 
+// TERM IMAGES — stored separately so updates to terms don't wipe images
+var termImages=(function(){try{var s=localStorage.getItem('am_term_imgs_v1');if(s)return JSON.parse(s);}catch(e){}return {};})();
+function saveTermImages(){try{localStorage.setItem('am_term_imgs_v1',JSON.stringify(termImages));}catch(e){}}
+
 // IMAGE UPLOAD FOR TERMS
 var imgUploadTargetId=null;
 function triggerImgUpload(termId){
@@ -1181,15 +1185,17 @@ function handleImgUpload(event){
   if(!file||!imgUploadTargetId)return;
   var reader=new FileReader();
   reader.onload=function(e){
-    var t=resources.terms.find(function(x){return x.id===imgUploadTargetId;});
-    if(t){t.img=e.target.result;saveResources();renderResources();}
+    termImages[imgUploadTargetId]=e.target.result;
+    saveTermImages();
+    renderResources();
   };
   reader.readAsDataURL(file);
   event.target.value='';
 }
 function removeTermImg(termId){
-  var t=resources.terms.find(function(x){return x.id===termId;});
-  if(t){delete t.img;saveResources();renderResources();}
+  delete termImages[termId];
+  saveTermImages();
+  renderResources();
 }
 function openLightbox(src){
   document.getElementById('lightbox-img').src=src;
@@ -1307,10 +1313,18 @@ function renderResources(){
     h+='<div class="res-empty">No terms defined.</div>';
   } else {
     resources.terms.forEach(function(t,i){
+      var img=termImages[t.id];
       h+='<div class="res-item">'
         +'<div class="res-item-body"><div class="res-term">'+t.term+'</div><div class="res-def">'+t.def+'</div>';
-      if(t.img){
-        h+='<div class="res-img-wrap"><img class="res-img-thumb" src="'+t.img+'" alt="'+t.term+' reference" onclick="openLightbox(this.src)"/></div>';
+      if(img){
+        h+='<div class="res-img-wrap">'
+          +'<img class="res-img-thumb" src="'+img+'" alt="'+t.term+'" onclick="openLightbox(this.src)"/>'
+          +'<button class="res-img-remove-btn" onclick="removeTermImg(\''+t.id+'\')">&#10005; Remove image</button>'
+          +'</div>';
+      } else {
+        h+='<div class="res-img-wrap">'
+          +'<label class="res-img-upload-btn" onclick="triggerImgUpload(\''+t.id+'\')">&#128247; Add screenshot</label>'
+          +'</div>';
       }
       h+='</div></div>';
     });
