@@ -485,7 +485,26 @@ function initDayData(){
 
 function initWeek(){return [initDayData(),initDayData(),initDayData(),initDayData()];}
 
-var weekData=(function(){try{var s=localStorage.getItem('am_week_v2');return s?JSON.parse(s):initWeek();}catch(e){return initWeek();}})();
+function loadWeek(){
+  try{
+    var s=localStorage.getItem('am_week_v2');
+    if(!s)return initWeek();
+    var data=JSON.parse(s);
+    if(!Array.isArray(data)||data.length!==4)return initWeek();
+    // Migrate each day — add missing fields
+    data.forEach(function(day){
+      if(!day.packRates)day.packRates={};
+      if(!day.dailyAdmin)day.dailyAdmin={};
+      if(!day.stationIssues)day.stationIssues=[];
+      if(!day.coachingLogs)day.coachingLogs={p2:[],p3:[]};
+      if(!day.stuLogs)day.stuLogs={p1b:[],p1br:[],p2b:[],p2br:[],p3b:[],p3br:[]};
+      if(!day.handoffData)day.handoffData={pallets:'',boxSuites:'',slamCarts:'',trayCount:'',wallHO:''};
+      if(!day.state)day.state=initState();
+    });
+    return data;
+  }catch(e){return initWeek();}
+}
+var weekData=loadWeek();
 var activeDay=(function(){try{return parseInt(localStorage.getItem('am_active_day')||'0');}catch(e){return 0;}})();
 var activeP=0;
 var showResources=false;
@@ -1526,10 +1545,18 @@ function toggleTheme(){
 })();
 
 // INIT
-document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-document.getElementById('am-name').value=D().amName||'';
-updateStuQuickButtons();
-renderDayTabs();renderPeriodTabs();renderMain();updateStats();renderWeekSummary();
+try{
+  document.getElementById('header-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  document.getElementById('am-name').value=D().amName||'';
+  updateStuQuickButtons();
+  renderDayTabs();renderPeriodTabs();renderMain();updateStats();renderWeekSummary();
+}catch(e){
+  console.error('Init error:',e);
+  // Try recovery — clear and restart
+  weekData=initWeek();
+  saveWeek();
+  renderDayTabs();renderPeriodTabs();renderMain();updateStats();renderWeekSummary();
+}
 </script>
 </body>
 </html>
