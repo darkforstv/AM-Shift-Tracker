@@ -216,7 +216,35 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .ws-val{font-size:13px;font-weight:600;color:var(--gray-800);}
 .ws-item{display:flex;align-items:center;gap:6px;}
 
-/* RESOURCES PAGE */
+/* PACK RATE TAB */
+.packrate-wrap{padding:20px 0;}
+.packrate-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.packrate-table-wrap{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);}
+.packrate-table-head{padding:12px 16px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;}
+.packrate-table-title{font-size:13px;font-weight:600;color:var(--gray-800);}
+.packrate-avg{font-size:12px;color:var(--gray-400);}
+.packrate-avg span{font-weight:600;color:var(--gray-800);}
+.packrate-table{width:100%;border-collapse:collapse;}
+.packrate-table th{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--gray-400);padding:8px 12px;text-align:left;border-bottom:1px solid var(--gray-100);}
+.packrate-table td{padding:6px 12px;border-bottom:1px solid var(--gray-50);font-size:13px;}
+.packrate-table tr:last-child td{border-bottom:none;}
+.packrate-table .time-cell{color:var(--gray-600);font-size:12px;white-space:nowrap;}
+.packrate-rate-input{width:90px;font-size:13px;font-weight:500;padding:4px 8px;border:1px solid var(--gray-200);border-radius:var(--radius-sm);background:var(--white);color:var(--gray-800);text-align:center;}
+.packrate-rate-input:focus{outline:none;border-color:var(--p2);}
+.packrate-rate-input:disabled{background:var(--gray-50);color:var(--gray-400);cursor:not-allowed;}
+.packrate-period-badge{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:500;white-space:nowrap;}
+.pb-p1{background:var(--p1-light);color:var(--p1);}
+.pb-p2{background:var(--p2-light);color:var(--p2);}
+.pb-p3{background:var(--p3-light);color:var(--p3);}
+.packrate-chart-wrap{background:var(--white);border:1px solid var(--gray-200);border-radius:var(--radius);padding:16px;}
+.packrate-chart-title{font-size:13px;font-weight:600;color:var(--gray-800);margin-bottom:12px;}
+.packrate-chart-area{width:100%;height:280px;position:relative;}
+.packrate-chart-area canvas{width:100%!important;height:100%!important;}
+.packrate-no-data{display:flex;align-items:center;justify-content:center;height:280px;font-size:13px;color:var(--gray-400);}
+[data-theme="dark"] .packrate-table-wrap,[data-theme="dark"] .packrate-chart-wrap{background:var(--gray-100);border-color:var(--gray-200);}
+[data-theme="dark"] .packrate-rate-input{background:var(--gray-200);color:var(--gray-800);border-color:var(--gray-400);}
+[data-theme="dark"] .packrate-rate-input:disabled{background:var(--gray-100);}
+@media(max-width:900px){.packrate-grid{grid-template-columns:1fr;}}
 .resources-page{margin:0 24px 24px;min-height:400px;}
 .res-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding-top:20px;}
 .res-title{font-size:18px;font-weight:600;color:var(--gray-800);}
@@ -309,6 +337,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="week-summary" id="week-summary"></div>
 <div class="period-nav" id="period-nav"></div>
 <div class="main" id="main-content"></div>
+<div id="packrate-page" style="display:none;margin:0 24px 24px;"></div>
 <div class="resources-page" id="resources-page" style="display:none;"></div>
 <div class="bottom-bar">
   <div style="display:flex;gap:8px;">
@@ -394,6 +423,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 var DAY_NAMES = ['Day 1','Day 2','Day 3','Day 4'];
 var CAT_COLORS = ['#3B6DD4','#7B4FBF','#1A9E6E','#C0682B','#1A7A8A','#8A5C1A'];
+var PACK_RATE_BLOCKS=[
+  {label:'18:00 - 19:00',period:'p1',editable:true},
+  {label:'19:00 - 20:00',period:'p1',editable:true},
+  {label:'20:00 - 21:00',period:'p1',editable:true},
+  {label:'21:00 - 22:00',period:'p1',editable:true},
+  {label:'22:00 - 23:00',period:'p2',editable:true},
+  {label:'23:00 - 00:00',period:'p2',editable:true},
+  {label:'00:00 - 01:00',period:'p2',editable:true},
+  {label:'01:00 - 02:00',period:'p2',editable:true},
+  {label:'02:00 - 03:00',period:'p3',editable:true},
+  {label:'03:00 - 04:00',period:'p3',editable:true},
+  {label:'04:00 - 05:00',period:'p3',editable:true}
+];
+
 var PERIODS = [
   {id:'p1',name:'P1',time:'18:30 - 22:15',color:'p1',cats:[
     {cat:'Start up',tasks:[{id:'p1-1',name:'Start up'}]},
@@ -435,7 +478,8 @@ function initDayData(){
     stationIssues:[],
     coachingLogs:{p2:[],p3:[]},
     stuLogs:{p1b:[],p1br:[],p2b:[],p2br:[],p3b:[],p3br:[]},
-    handoffData:{pallets:'',boxSuites:'',slamCarts:'',trayCount:'',wallHO:''}
+    handoffData:{pallets:'',boxSuites:'',slamCarts:'',trayCount:'',wallHO:''},
+    packRates:{}
   };
 }
 
@@ -445,6 +489,7 @@ var weekData=(function(){try{var s=localStorage.getItem('am_week_v2');return s?J
 var activeDay=(function(){try{return parseInt(localStorage.getItem('am_active_day')||'0');}catch(e){return 0;}})();
 var activeP=0;
 var showResources=false;
+var showPackRate=false;
 var resEditMode=false;
 var resActiveForm=null;
 
@@ -595,7 +640,46 @@ function setStuField(key,sid,f,v){
   if(e)e[f]=v;saveWeek();
 }
 
-function switchP(i){activeP=i;renderPeriodTabs();renderMain();}
+function switchP(i){
+  showPackRate=false;
+  activeP=i;
+  renderPeriodTabs();renderMain();
+  document.getElementById('main-content').style.display='';
+  document.getElementById('packrate-page').style.display='none';
+}
+function switchToPackRate(){
+  showPackRate=true;
+  renderPeriodTabs();
+  document.getElementById('main-content').style.display='none';
+  document.getElementById('packrate-page').style.display='block';
+  renderPackRate();
+}
+function setPackRate(label,val){
+  if(!D().packRates)D().packRates={};
+  if(val===''||val===null){
+    delete D().packRates[label];
+  } else {
+    D().packRates[label]=val;
+  }
+  saveWeek();
+  renderPeriodTabs();
+  // Update avg display
+  var rates=D().packRates;
+  var filled=PACK_RATE_BLOCKS.filter(function(b){return rates[b.label];});
+  var avg=filled.length?Math.round(filled.reduce(function(a,b){return a+parseFloat(rates[b.label]||0);},0)/filled.length):0;
+  var avgEl=document.getElementById('packrate-avg');
+  if(avgEl)avgEl.innerHTML='Avg: <span>'+(avg||'—')+' uph</span>';
+  // Show chart if not already visible
+  var chartWrap=document.getElementById('packrate-chart-inner');
+  var noData=document.getElementById('packrate-no-data');
+  if(filled.length>0){
+    var chartInner=document.getElementById('packrate-chart-inner');
+    if(chartInner&&!document.getElementById('packrate-canvas')){
+      chartInner.innerHTML='<div class="packrate-chart-area"><canvas id="packrate-canvas"></canvas></div>';
+    }
+    renderPackRateChart();
+  }
+}
 
 function toggleExpand(pi,ci,ti){
   D().state[pi].cats[ci].tasks[ti].expanded=!D().state[pi].cats[ci].tasks[ti].expanded;
@@ -656,11 +740,11 @@ function renderDayTabs(){
 
 function renderPeriodTabs(){
   var nav=document.getElementById('period-nav');
-  nav.innerHTML=D().state.map(function(p,i){
+  var h=D().state.map(function(p,i){
     var tasks=p.cats.reduce(function(a,c){return a.concat(c.tasks);},[]);
     var done=tasks.filter(function(t){return t.done;}).length;
     var pct=tasks.length?Math.round(done/tasks.length*100):0;
-    var ac=i===activeP?'active-'+p.color:'';
+    var ac=(!showPackRate&&i===activeP)?'active-'+p.color:'';
     return '<button class="period-tab '+ac+'" onclick="switchP('+i+')">'
       +'<span class="tab-period-name">'+p.name+'</span>'
       +'<span class="tab-time">'+p.time+'</span>'
@@ -668,6 +752,15 @@ function renderPeriodTabs(){
       +'<div class="tab-mini-bar"><div class="tab-mini-fill" style="width:'+pct+'%"></div></div>'
       +'</button>';
   }).join('');
+  var filled=PACK_RATE_BLOCKS.filter(function(b){return D().packRates[b.label];}).length;
+  var prColor=showPackRate?'background:var(--gray-800);color:#fff;border-color:var(--gray-800);':'';
+  h+='<button class="period-tab" style="'+prColor+'" onclick="switchToPackRate()">'
+    +'<span class="tab-period-name" style="'+(showPackRate?'':'color:var(--gray-800);')+'">&#128200; Pack Rate</span>'
+    +'<span class="tab-time" style="'+(showPackRate?'opacity:.75;':'color:var(--gray-400);')+'">Per hour tracking</span>'
+    +'<span class="tab-count" style="'+(showPackRate?'opacity:.8;':'color:var(--gray-400);')+'">'+filled+'/'+PACK_RATE_BLOCKS.length+' entries</span>'
+    +'<div class="tab-mini-bar"><div class="tab-mini-fill" style="width:'+Math.round(filled/PACK_RATE_BLOCKS.length*100)+'%"></div></div>'
+    +'</button>';
+  nav.innerHTML=h;
 }
 
 function renderWeekSummary(){
@@ -974,6 +1067,17 @@ function buildReportText(){
   });
   txt+='\n';
   var hd=day.handoffData;
+  var pr=day.packRates||{};
+  var prFilled=PACK_RATE_BLOCKS.filter(function(b){return pr[b.label];});
+  if(prFilled.length){
+    txt+='\nPACK RATE PER HOUR\n'+line+'\n';
+    PACK_RATE_BLOCKS.forEach(function(b){
+      var v=pr[b.label];
+      txt+='  '+b.label+' ('+b.period.toUpperCase()+'): '+(v?v+' uph':'—')+'\n';
+    });
+    var prAvg=Math.round(prFilled.reduce(function(a,b){return a+parseFloat(pr[b.label]||0);},0)/prFilled.length);
+    txt+='  Shift average: '+prAvg+' uph\n';
+  }
   txt+='HANDOFF SUMMARY\n'+line+'\n';
   txt+='Pallets at tote stacker: '+(hd.pallets||'-')+'\n';
   txt+='Carts at slam kickout:   '+(hd.slamCarts||'-')+'\n';
@@ -1100,14 +1204,19 @@ var resources=(function(){
     var s=localStorage.getItem('am_resources_v1');
     return s?JSON.parse(s):{
       terms:[
-        {id:'t1',term:'RBI',def:'Role-Based Instruction — a structured one-on-one coaching conversation focused on a specific behavior or performance opportunity.'},
+        {id:'t1',term:'Live Rate / True Rate',def:'Live Rate is what is actively being packed at that moment. True Rate factors in Idle time (inactive time). Best way to check True rates is in PPR (Process Path Rollup).'},
         {id:'t2',term:'STU',def:'Standby Time Utilization — tracking and addressing associates who are idle or not actively working their station.'},
-        {id:'t3',term:'VIA',def:'Voice in Action — Amazon\'s internal audit tool used to conduct safety and compliance checks on the floor.'},
-        {id:'t4',term:'EOS',def:'End of Shift — the period at the close of a shift where final metrics are captured and handoff notes are prepared.'},
-        {id:'t5',term:'HOW',def:'Handoff Walls — physical or digital boards updated at end of shift to communicate open issues and metrics to the incoming AM.'},
-        {id:'t6',term:'P1 / P2 / P3',def:'The three periods that divide a night shift: P1 (18:30–22:15), P2 (22:45–02:00), and P3 (02:30–05:00).'},
-        {id:'t7',term:'RTB',def:'Return to Building — process of tracking associates who leave the floor and ensuring they return in a timely manner.'},
-        {id:'t8',term:'UPH',def:'Units Per Hour — the primary productivity metric tracking how many units an associate processes in an hour.'}
+        {id:'t3',term:'Tray Count',def:'Tray Count is how many grey trays are currently on the sort. This is how the walls "build" work — the item in the tray is placed in the chute.'},
+        {id:'t4',term:'Buffer',def:'"In Buffer" / "Under Buffer" is what you will hear on the radio. Buffer is the amount of "work" coming to or at your department. In buffer means you are receiving the right amount of work for the amount of walls that are open. Under buffer means you are not receiving enough work for the amount of walls you have open. Over buffer means you have too much coming or at destination.'},
+        {id:'t5',term:'HC - Headcount',def:'Headcount is how many packers, Rebiners, and Induct you currently have staffed. This term is also for planning — OM will plan us to be at a certain headcount to achieve Volume goals, but we need to update them on the actual Headcount we receive and staffed in the walls/stations.'},
+        {id:'t6',term:'HCPW - Headcount Per Wall',def:'HCPW is found on Rainbow. This indicates how many packers you have per wall. The goal is to have 5.5 HC PW (sweet spot). Average HC PW is 6.0.'},
+        {id:'t7',term:'PPW - Package Per Wall',def:'PPW indicates the orders that are packable in the walls. This is found on Rainbow, shown in the dark green.'},
+        {id:'t8',term:'Incompletes - (PPW)',def:'Incompletes are related to PPW, indicating on Rainbow in yellow. These are the orders that are "incomplete" — not all items are there to be packed out for the customer.'},
+        {id:'t9',term:'REDBULL',def:'This is a code Leadership uses on the radio to let us know we can VTO out associates. VTO is Volunteer Time Off — this means associates can leave to go home at the time we VTO them out, but they will not get paid for the remainder of the shift.'},
+        {id:'t10',term:'TPH - Throughput Per Hour',def:'TPH stands for Throughput Per Hour and is a measure of how many units are processed per hour of labor. It is essentially another way of saying "rate" in warehouse operations. The formula is simple: TPH = Volume ÷ Hours. This is found on Process Path Rollup.'},
+        {id:'t11',term:'MRS - Main Routing Sorter',def:'MRS is what brings us the Totes to each department. For AFEs the totes are coming down from pick with items in them that are for the orders we are packing. The totes are going to the Induct station to be scanned and placed into the grey trays.'},
+        {id:'t12',term:'Recir',def:'Recir or Recirculation is a term used for a couple of different conveyor belts. This means that the totes or trays are recir-ing on the sort or the MRS with no path to divert to. For example, the grey trays come down to the mini sort (the station for the rebin) and if they are back up and no more trays can come to that line it will Recir on the main sort.'},
+        {id:'t13',term:'UIT - Unknown Idle Time',def:'UIT stands for Unknown Idle Time and represents non-productive time that an associate spends in a process that is not already accounted for in other known idle time metrics. UIT captures any unaccounted idle time between productive cycles. It is calculated as the time from when an associate performs their last successful scan to the time when they perform their next successful scan of an item.'}
       ],
       links:[
         {id:'l1',title:'VIA Audit Tool',url:'https://apollo-audit.corp.amazon.com/audits/new?audit_type_id=8515&previous_audit=139083677',desc:'Submit and track Voice in Action audits'},
@@ -1121,23 +1230,25 @@ var resources=(function(){
 function saveResources(){try{localStorage.setItem('am_resources_v1',JSON.stringify(resources));}catch(e){}}
 
 function switchToResources(){
-  showResources=true;
+  showResources=true;showPackRate=false;
   resActiveForm=null;
   document.getElementById('stats-bar').style.display='none';
   document.getElementById('week-summary').style.display='none';
   document.getElementById('period-nav').style.display='none';
   document.getElementById('main-content').style.display='none';
+  document.getElementById('packrate-page').style.display='none';
   document.getElementById('resources-page').style.display='block';
   renderDayTabs();
   renderResources();
 }
 function switchDay(i){
-  showResources=false;resActiveForm=null;
+  showResources=false;resActiveForm=null;showPackRate=false;
   activeDay=i;activeP=0;saveActiveDay();
   document.getElementById('stats-bar').style.display='';
   document.getElementById('week-summary').style.display='';
   document.getElementById('period-nav').style.display='';
   document.getElementById('main-content').style.display='';
+  document.getElementById('packrate-page').style.display='none';
   document.getElementById('resources-page').style.display='none';
   document.getElementById('am-name').value=D().amName||'';
   renderDayTabs();renderPeriodTabs();renderMain();updateStats();renderWeekSummary();
@@ -1185,58 +1296,23 @@ function deleteLink(i){if(!confirm('Delete this link?'))return;resources.links.s
 function renderResources(){
   var h='<div class="res-header">'
     +'<span class="res-title">Resources</span>'
-    +'<button class="res-edit-btn'+(resEditMode?' active':'')+'" onclick="toggleResEditMode()">'
-    +(resEditMode?'&#10003; Done editing':'&#9998; Edit')+'</button>'
     +'</div>';
 
   // TERMS SECTION
   h+='<div class="res-section">';
-  h+='<div class="res-section-head"><span class="res-section-title">&#128218; Terms & Definitions</span>';
-  if(resEditMode)h+='<button class="res-add-btn" onclick="showResForm(\'terms\',-1)">+ Add term</button>';
-  h+='</div>';
-
-  if(resActiveForm&&resActiveForm.section==='terms'&&resActiveForm.index===-1){
-    h+='<div class="res-edit-form">'
-      +'<div class="res-form-grid">'
-      +'<div><div class="res-form-label">Term</div><input class="res-form-input" id="res-term-input" id2="res-form-focus" type="text" placeholder="e.g. UPH"/></div>'
-      +'<div style="grid-column:1/-1"><div class="res-form-label">Definition</div><textarea class="res-form-ta" id="res-def-input" placeholder="Explain what this term means..."></textarea></div>'
-      +'</div>'
-      +'<div class="res-form-actions"><button class="res-cancel-btn" onclick="hideResForm()">Cancel</button><button class="res-save-btn" onclick="saveResTerm()">Save term</button></div>'
-      +'</div>';
-  }
+  h+='<div class="res-section-head"><span class="res-section-title">&#128218; Terms & Definitions</span>'
+    +'<span style="font-size:11px;color:var(--gray-400);">Read only</span></div>';
 
   if(!resources.terms.length){
-    h+='<div class="res-empty">No terms yet. Click "+ Add term" to get started.</div>';
+    h+='<div class="res-empty">No terms defined.</div>';
   } else {
     resources.terms.forEach(function(t,i){
-      var isEditing=resActiveForm&&resActiveForm.section==='terms'&&resActiveForm.index===i;
-      if(isEditing){
-        h+='<div class="res-edit-form">'
-          +'<div class="res-form-grid">'
-          +'<div><div class="res-form-label">Term</div><input class="res-form-input" id="res-term-input" type="text" value="'+t.term.replace(/"/g,'&quot;')+'"/></div>'
-          +'<div style="grid-column:1/-1"><div class="res-form-label">Definition</div><textarea class="res-form-ta" id="res-def-input">'+t.def+'</textarea></div>'
-          +'</div>'
-          +'<div class="res-form-actions"><button class="res-cancel-btn" onclick="hideResForm()">Cancel</button><button class="res-save-btn" onclick="saveResTerm()">Save</button></div>'
-          +'</div>';
-      } else {
-        h+='<div class="res-item">'
-          +'<div class="res-item-body"><div class="res-term">'+t.term+'</div><div class="res-def">'+t.def+'</div>';
-        if(t.img){
-          h+='<div class="res-img-wrap"><img class="res-img-thumb" src="'+t.img+'" alt="'+t.term+' reference" onclick="openLightbox(this.src)"/>';
-          if(resEditMode)h+='<button class="res-img-remove-btn" onclick="removeTermImg(\''+t.id+'\')">&#10005; Remove image</button>';
-          h+='</div>';
-        } else if(resEditMode){
-          h+='<div class="res-img-wrap"><label class="res-img-upload-btn" onclick="triggerImgUpload(\''+t.id+'\')">&#128247; Add screenshot</label></div>';
-        }
-        h+='</div>';
-        if(resEditMode){
-          h+='<div class="res-action-btns">'
-            +'<button class="res-edit-item-btn" onclick="showResForm(\'terms\','+i+')" title="Edit">&#9998;</button>'
-            +'<button class="res-del-btn" onclick="deleteTerm('+i+')" title="Delete">&#10005;</button>'
-            +'</div>';
-        }
-        h+='</div>';
+      h+='<div class="res-item">'
+        +'<div class="res-item-body"><div class="res-term">'+t.term+'</div><div class="res-def">'+t.def+'</div>';
+      if(t.img){
+        h+='<div class="res-img-wrap"><img class="res-img-thumb" src="'+t.img+'" alt="'+t.term+' reference" onclick="openLightbox(this.src)"/></div>';
       }
+      h+='</div></div>';
     });
   }
   h+='</div>';
@@ -1244,8 +1320,11 @@ function renderResources(){
   // LINKS SECTION
   h+='<div class="res-section">';
   h+='<div class="res-section-head"><span class="res-section-title">&#128279; Useful Links</span>';
+  h+='<div style="display:flex;align-items:center;gap:8px;">';
   if(resEditMode)h+='<button class="res-add-btn" onclick="showResForm(\'links\',-1)">+ Add link</button>';
-  h+='</div>';
+  h+='<button class="res-edit-btn'+(resEditMode?' active':'')+'" onclick="toggleResEditMode()">'
+    +(resEditMode?'&#10003; Done':'&#9998; Edit')+'</button>';
+  h+='</div></div>';
 
   if(resActiveForm&&resActiveForm.section==='links'&&resActiveForm.index===-1){
     h+='<div class="res-edit-form">'
@@ -1289,6 +1368,134 @@ function renderResources(){
   h+='</div>';
   document.getElementById('resources-page').innerHTML=h;
 }
+// PACK RATE
+function renderPackRate(){
+  if(!D().packRates)D().packRates={};
+  var rates=D().packRates;
+  var filled=PACK_RATE_BLOCKS.filter(function(b){return rates[b.label];});
+  var avg=filled.length?Math.round(filled.reduce(function(a,b){return a+parseFloat(rates[b.label]||0);},0)/filled.length):0;
+
+  var h='<div class="packrate-wrap"><div class="packrate-grid">';
+
+  // TABLE
+  h+='<div class="packrate-table-wrap">';
+  h+='<div class="packrate-table-head"><span class="packrate-table-title">Pack Rate per Hour</span>';
+  h+='<span class="packrate-avg" id="packrate-avg">Avg: <span>'+(avg||'—')+' uph</span></span></div>';
+  h+='<table class="packrate-table"><thead><tr><th>Time block</th><th>Period</th><th>Rate (uph)</th></tr></thead><tbody>';
+  PACK_RATE_BLOCKS.forEach(function(b){
+    var val=rates[b.label]||'';
+    var pbClass=b.period==='p1'?'pb-p1':b.period==='p2'?'pb-p2':'pb-p3';
+    var pbLabel=b.period==='p1'?'P1':b.period==='p2'?'P2':'P3';
+    h+='<tr>'
+      +'<td class="time-cell">'+b.label+'</td>'
+      +'<td><span class="packrate-period-badge '+pbClass+'">'+pbLabel+'</span></td>'
+      +'<td><input class="packrate-rate-input" type="number" min="0" placeholder="—" value="'+val+'"'
+      +' onchange="setPackRate(\''+b.label+'\',this.value)"/></td>'
+      +'</tr>';
+  });
+  h+='</tbody></table></div>';
+
+  // CHART
+  h+='<div class="packrate-chart-wrap">';
+  h+='<div class="packrate-chart-title">Rate trend — shift overview</div>';
+  var hasData=filled.length>0;
+  if(hasData){
+    h+='<div id="packrate-chart-inner"><div class="packrate-chart-area"><canvas id="packrate-canvas"></canvas></div></div>';
+  } else {
+    h+='<div id="packrate-chart-inner"><div class="packrate-no-data" id="packrate-no-data">No data yet — enter a rate in any time block to see the trend chart</div></div>';
+  }
+  h+='</div>';
+
+  h+='</div></div>';
+  document.getElementById('packrate-page').innerHTML=h;
+  if(hasData)renderPackRateChart();
+}
+
+function renderPackRateChart(){
+  var canvas=document.getElementById('packrate-canvas');
+  if(!canvas)return;
+  var rates=D().packRates||{};
+  var labels=[];var data=[];
+  PACK_RATE_BLOCKS.forEach(function(b){
+    labels.push(b.label.split(' - ')[0]);
+    data.push(rates[b.label]?parseFloat(rates[b.label]):null);
+  });
+  var ctx=canvas.getContext('2d');
+  var W=canvas.offsetWidth||500;var H=canvas.offsetHeight||280;
+  canvas.width=W;canvas.height=H;
+  ctx.clearRect(0,0,W,H);
+
+  var pad={top:20,right:20,bottom:40,left:50};
+  var cW=W-pad.left-pad.right;var cH=H-pad.top-pad.bottom;
+  var vals=data.filter(function(v){return v!==null;});
+  var maxV=vals.length?Math.max.apply(null,vals)*1.15:400;
+  var minV=vals.length?Math.max(0,Math.min.apply(null,vals)*0.85):0;
+  var range=maxV-minV||1;
+
+  // Grid lines
+  var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+  var gridColor=isDark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.06)';
+  var textColor=isDark?'#9CA3AF':'#9BA3B0';
+  var lineColor='#7B4FBF';
+
+  ctx.strokeStyle=gridColor;ctx.lineWidth=1;
+  for(var g=0;g<=4;g++){
+    var gy=pad.top+cH*(1-g/4);
+    ctx.beginPath();ctx.moveTo(pad.left,gy);ctx.lineTo(pad.left+cW,gy);ctx.stroke();
+    ctx.fillStyle=textColor;ctx.font='10px sans-serif';ctx.textAlign='right';
+    ctx.fillText(Math.round(minV+range*g/4),pad.left-6,gy+4);
+  }
+
+  // X labels
+  ctx.fillStyle=textColor;ctx.font='10px sans-serif';ctx.textAlign='center';
+  var step=cW/(labels.length-1);
+  labels.forEach(function(l,i){
+    ctx.fillText(l,pad.left+i*step,H-pad.bottom+14);
+  });
+
+  // Line + dots
+  ctx.strokeStyle=lineColor;ctx.lineWidth=2.5;ctx.lineJoin='round';
+  ctx.beginPath();
+  var started=false;
+  data.forEach(function(v,i){
+    if(v===null)return;
+    var x=pad.left+i*step;
+    var y=pad.top+cH*(1-(v-minV)/range);
+    if(!started){ctx.moveTo(x,y);started=true;}
+    else ctx.lineTo(x,y);
+  });
+  ctx.stroke();
+
+  // Fill under line
+  var firstI=data.findIndex(function(v){return v!==null;});
+  var lastI=data.length-1-data.slice().reverse().findIndex(function(v){return v!==null;});
+  if(firstI>=0){
+    ctx.beginPath();
+    data.forEach(function(v,i){
+      if(v===null)return;
+      var x=pad.left+i*step;
+      var y=pad.top+cH*(1-(v-minV)/range);
+      if(i===firstI)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    });
+    ctx.lineTo(pad.left+lastI*step,pad.top+cH);
+    ctx.lineTo(pad.left+firstI*step,pad.top+cH);
+    ctx.closePath();
+    ctx.fillStyle=isDark?'rgba(123,79,191,0.15)':'rgba(123,79,191,0.08)';
+    ctx.fill();
+  }
+
+  // Dots
+  data.forEach(function(v,i){
+    if(v===null)return;
+    var x=pad.left+i*step;
+    var y=pad.top+cH*(1-(v-minV)/range);
+    ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);
+    ctx.fillStyle=lineColor;ctx.fill();
+    ctx.fillStyle=textColor;ctx.font='bold 10px sans-serif';ctx.textAlign='center';
+    ctx.fillText(v,x,y-10);
+  });
+}
+
 function applyTheme(t){
   if(t==='dark')document.documentElement.setAttribute('data-theme','dark');
   else document.documentElement.removeAttribute('data-theme');
